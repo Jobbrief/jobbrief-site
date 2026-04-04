@@ -1091,17 +1091,16 @@ document.addEventListener('DOMContentLoaded', () => {
 .fb-tag { font-family:'DM Mono',monospace; font-size:0.56rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.7rem; border:1px solid var(--rule); background:var(--paper); color:var(--dim); cursor:none; transition:all 0.15s; }
 .fb-tag:hover, .fb-tag.fb-sel { background:var(--ink); color:var(--paper); border-color:var(--ink); }
 #feedbackWidget { position:fixed; right:1.5rem; bottom:4.5rem; z-index:199; }
-#feedbackToggle { display:flex; align-items:center; gap:0.6rem; padding:0.7rem 1.2rem; background:var(--ink); color:var(--paper); border:none; cursor:none; font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; box-shadow:0 4px 16px rgba(10,10,10,0.2); transition:background 0.2s; }
+#feedbackToggle { display:flex; align-items:center; gap:0.6rem; padding:0.7rem 1.2rem; background:var(--ink); color:var(--paper); text-decoration:none; font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; box-shadow:0 4px 16px rgba(10,10,10,0.2); transition:background 0.2s; }
 #feedbackToggle:hover { background:var(--gold); color:var(--ink); }
 #feedbackPanel { display:none; flex-direction:column; position:absolute; bottom:calc(100% + 0.75rem); right:0; width:320px; background:var(--cream); padding:1.25rem; border:1px solid var(--rule); box-shadow:0 8px 32px rgba(10,10,10,0.12); }
 @media (max-width:900px) { #feedbackWidget { right:1rem; bottom:5rem; } #feedbackPanel { width:calc(100vw - 2rem); right:auto; left:0; } #aiBanner { padding:0.75rem 1.5rem; } }
 </style>
 
 <div id="feedbackWidget">
-  <div id="feedbackPanel"></div>
-  <button id="feedbackToggle" onclick="toggleFeedback()">
+  <a id="feedbackToggle" href="https://tally.so/r/EkDA24" target="_blank">
     <span>💬</span> Feedback · Signaler un problème
-  </button>
+  </a>
 </div>
 
 <!-- ——— MENTIONS LÉGALES ——— -->
