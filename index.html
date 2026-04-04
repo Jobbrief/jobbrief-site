@@ -25,7 +25,8 @@
 }
 
 html { scroll-behavior: smooth; }
-body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); overflow-x: hidden; cursor: none; }
+body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); overflow-x: hidden; }
+@media (pointer: fine) { body { cursor: none; } }
 
 /* ——— CURSOR ——— */
 .cursor { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s; }
@@ -331,21 +332,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- MODAL pré-inscription -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕ Fermer</button>
-    <div class="modal-title">Votre premier rapport est gratuit.</div>
-    <div class="modal-sub">Laissez votre email. On vous envoie un aperçu du rapport — les 3 premiers signaux clés, les dirigeants, le contexte financier. Pour débloquer la suite et les questions d'entretien personnalisées : 9€.</div>
-    <div class="modal-form">
-      <input type="email" class="modal-input" placeholder="votre@email.com">
-      <input type="text" class="modal-input" placeholder="Société cible (ex : un cabinet TS, une ETI, une fondation…)">
-      <input type="text" class="modal-input" placeholder="Poste visé (ex : CFO, Analyste TS, Stagiaire…)">
-      <button class="modal-btn">Recevoir mon aperçu gratuit →</button>
-    </div>
-    <div class="modal-legal">Aucune carte bancaire · Données non revendues · Résultats en 30 min</div>
-  </div>
-</div>
+
 
 <!-- HEADER -->
 <header>
@@ -558,7 +545,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       </div>
       <div class="step-cta">
         <button class="btn-step btn-step-ghost" onclick="showStep(2)">← Retour</button>
-        <button class="btn-step btn-step-primary" onclick="generatePreview()">Générer mon aperçu gratuit →</button>
+        <button class="btn-step btn-step-primary" onclick="window.open('https://tally.so/r/GxDk8p','_blank')">Recevoir mon aperçu gratuit →</button>
         <div class="step-note">Résultats en 30 min · 1 rapport gratuit</div>
       </div>
     </div>
@@ -908,9 +895,8 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
   <div class="footer-logo">Job<span>Brief</span></div>
   <div class="footer-copy">© 2026 JobBrief · Intelligence société · Paris</div>
   <div class="footer-links">
-    <a href="#">Mentions légales</a>
-    <a href="#">CGU</a>
-    <a href="#">Contact</a>
+    <a href="#mentions">Mentions légales</a>
+    <a href="mailto:contact@jobbrief.fr">Contact</a>
   </div>
 </footer>
 
@@ -932,11 +918,6 @@ document.querySelectorAll('button,a,input,textarea,.upload-zone,.pill,.q-opt,.in
   el.addEventListener('mouseenter', () => { ring.style.width='48px'; ring.style.height='48px'; ring.style.opacity='0.8'; });
   el.addEventListener('mouseleave', () => { ring.style.width='32px'; ring.style.height='32px'; ring.style.opacity='0.5'; });
 });
-
-// ——— MODAL ———
-function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 
 // ——— SCROLL REVEAL ———
 const revealObs = new IntersectionObserver(entries => {
@@ -1030,51 +1011,8 @@ document.getElementById('cvFile').addEventListener('change', e => {
 // ——— CTA FORM ———
 function handleCTA(e) {
   e.preventDefault();
-  openModal();
+  window.open('https://tally.so/r/GxDk8p', '_blank');
 }
-
-// ——— FEEDBACK WIDGET ———
-function toggleFeedback() {
-  const panel = document.getElementById('feedbackPanel');
-  panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
-  if (panel.style.display === 'flex') panel.querySelector('textarea').focus();
-}
-function submitFeedback(e) {
-  e.preventDefault();
-  const btn = document.getElementById('feedbackBtn');
-  const msg = document.querySelector('#feedbackPanel textarea').value.trim();
-  if (!msg) return;
-  // Ici brancher sur Tally / Resend / Airtable — placeholder
-  document.getElementById('feedbackPanel').innerHTML = '<div style="padding:1.5rem;text-align:center;font-family:\'DM Mono\',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dark)">Merci — message reçu.<br><span style="color:var(--dim);font-size:0.6rem;margin-top:0.5rem;display:block">On vous répond sous 24h.</span></div>';
-  setTimeout(() => {
-    document.getElementById('feedbackPanel').style.display = 'none';
-    document.getElementById('feedbackPanel').innerHTML = originalFeedbackHTML;
-  }, 3000);
-}
-const originalFeedbackHTML = `
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-    <span style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dark)">Feedback · Signaler un problème</span>
-    <button onclick="toggleFeedback()" style="background:none;border:none;cursor:none;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--dim)">✕</button>
-  </div>
-  <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap">
-    <button class="fb-tag" onclick="setFbTag(this)">🐛 Bug</button>
-    <button class="fb-tag" onclick="setFbTag(this)">💡 Suggestion</button>
-    <button class="fb-tag" onclick="setFbTag(this)">❌ Donnée incorrecte</button>
-    <button class="fb-tag" onclick="setFbTag(this)">🙋 Autre</button>
-  </div>
-  <textarea id="fbText" placeholder="Décrivez le problème ou votre suggestion…" style="width:100%;padding:0.75rem;border:1px solid var(--rule);background:var(--paper);font-family:'Instrument Sans',sans-serif;font-size:0.85rem;resize:vertical;min-height:80px;outline:none;color:var(--ink)"></textarea>
-  <input type="email" id="fbEmail" placeholder="Votre email (optionnel)" style="width:100%;padding:0.6rem 0.75rem;border:1px solid var(--rule);background:var(--paper);font-family:'Instrument Sans',sans-serif;font-size:0.82rem;margin-top:0.5rem;outline:none;color:var(--ink)">
-  <button onclick="submitFeedback(event)" style="margin-top:0.75rem;width:100%;padding:0.7rem;background:var(--ink);color:var(--paper);border:none;cursor:none;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.2s">Envoyer →</button>
-`;
-function setFbTag(el) {
-  document.querySelectorAll('.fb-tag').forEach(t => t.classList.remove('fb-sel'));
-  el.classList.add('fb-sel');
-}
-// Init panel HTML
-document.addEventListener('DOMContentLoaded', () => {
-  const panel = document.getElementById('feedbackPanel');
-  if (panel) panel.innerHTML = originalFeedbackHTML;
-});
 </script>
 
 <!-- ——— BANDEAU LÉGAL IA ——— -->
