@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobBrief — Préparez votre entretien avec l'intelligence IA</title>
+<meta name="description" content="JobBrief analyse n'importe quelle société en 30 minutes : signaux financiers, dirigeants, culture, questions d'entretien personnalisées selon votre profil. Du stagiaire au directeur.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0a0a0a;
+  --paper: #f5f0e8;
+  --cream: #ede8dc;
+  --gold: #c8a84b;
+  --gold-dark: #7a5c10;
+  --gold-light: #e8c96a;
+  --dim: #5a5047;
+  --rule: rgba(10,10,10,0.12);
+  --rule-gold: rgba(200,168,75,0.3);
+  --blur-locked: blur(5px);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Instrument Sans', sans-serif; background: var(--paper); color: var(--ink); overflow-x: hidden; cursor: none; }
+
+/* ——— CURSOR ——— */
+.cursor { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s; }
+.cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: transform 0.15s, width 0.2s, height 0.2s, opacity 0.2s; opacity: 0.5; }
+
+/* ——— HEADER ——— */
+header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: rgba(245,240,232,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+.logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--ink); text-decoration: none; }
+.logo span { color: var(--gold); }
+nav { display: flex; gap: 2rem; align-items: center; }
+nav a { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s; }
+nav a:hover { color: var(--ink); }
+.btn-nav { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1.4rem; background: var(--ink); color: var(--paper); border: none; cursor: none; transition: background 0.2s; }
+.btn-nav:hover { background: var(--gold); color: var(--ink); }
+
+/* ——— HERO ——— */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 4.5rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, var(--rule) 39px, var(--rule) 40px); pointer-events: none; opacity: 0.35; }
+.hero-left { display: flex; flex-direction: column; justify-content: center; padding: 6rem 4rem; position: relative; z-index: 2; }
+.hero-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; }
+.hero-tag::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--gold-dark); }
+.hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 4.5vw, 5rem); font-weight: 900; line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 1.75rem; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-sub { font-size: 1rem; font-weight: 300; line-height: 1.75; color: var(--dim); max-width: 40ch; margin-bottom: 2.5rem; }
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+.btn-primary { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 1rem 2.5rem; background: var(--ink); color: var(--paper); border: none; cursor: none; transition: all 0.2s; position: relative; overflow: hidden; }
+.btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--gold); transform: translateX(-100%); transition: transform 0.3s; z-index: -1; }
+.btn-primary:hover { color: var(--ink); }
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-ghost { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 1rem 1.75rem; background: transparent; color: var(--dim); border: 1px solid var(--rule); cursor: none; transition: all 0.2s; }
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+.hero-right { position: relative; display: flex; align-items: center; justify-content: center; padding: 5rem 4rem; }
+
+/* Report preview card */
+.report-card { background: var(--ink); color: var(--paper); width: 100%; max-width: 400px; padding: 2rem; position: relative; box-shadow: 20px 20px 0 var(--gold); animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.rc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(245,240,232,0.1); }
+.rc-company { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
+.rc-sector { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-top: 0.2rem; }
+.rc-badge { font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; border: 1px solid var(--gold); color: var(--gold); }
+.signal-list { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem; }
+.signal-item { display: flex; align-items: flex-start; gap: 0.65rem; font-size: 0.75rem; line-height: 1.4; color: rgba(245,240,232,0.82); }
+.sdot { width: 6px; height: 6px; border-radius: 50%; margin-top: 0.3rem; flex-shrink: 0; }
+.dot-r { background: #f87171; }
+.dot-a { background: var(--gold); }
+.dot-g { background: #4ade80; }
+
+/* Locked row in preview */
+.signal-item.locked { filter: blur(4px); opacity: 0.45; user-select: none; }
+.unlock-hint { text-align: center; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); padding: 0.5rem; border: 1px solid var(--rule-gold); margin-bottom: 1.25rem; }
+.rc-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1.25rem; border-top: 1px solid rgba(245,240,232,0.08); }
+.rc-meta { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,240,232,0.3); }
+
+/* ——— TRUST BAR ——— */
+.trust-bar { background: var(--ink); padding: 1.5rem 4rem; display: flex; justify-content: center; align-items: center; gap: 4rem; border-top: 3px solid var(--gold); flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 0.75rem; }
+.trust-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); line-height: 1; }
+.trust-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+.trust-sep { width: 1px; height: 2rem; background: rgba(245,240,232,0.08); }
+
+/* ——— AUDIENCE PILLS ——— */
+.audience-section { padding: 5rem 4rem; text-align: center; background: var(--cream); }
+.audience-intro { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 1rem; }
+.audience-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+.audience-sub { font-size: 0.95rem; color: var(--dim); max-width: 48ch; margin: 0 auto 3rem; line-height: 1.7; }
+.audience-pills { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; max-width: 700px; margin: 0 auto; }
+.pill { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1.2rem; border: 1px solid var(--rule); color: var(--dim); cursor: none; transition: all 0.2s; background: var(--paper); }
+.pill:hover, .pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pill.featured { background: var(--ink); color: var(--gold); border-color: var(--ink); }
+
+/* ——— FLOW SECTION — LE COEUR DU PRODUIT ——— */
+.flow-section { padding: 6rem 4rem; background: var(--paper); }
+.flow-header { margin-bottom: 4rem; }
+.section-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+.section-tag::before { content: ''; width: 2rem; height: 1px; background: var(--gold-dark); }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 3.5vw, 3.5rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.section-sub { font-size: 0.95rem; line-height: 1.7; color: var(--dim); max-width: 48ch; }
+
+/* Flow app */
+.flow-app { border: 1px solid var(--rule); background: var(--paper); max-width: 760px; margin: 0 auto; }
+.flow-tabs { display: flex; border-bottom: 1px solid var(--rule); background: var(--cream); }
+.flow-tab { flex: 1; padding: 1rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; color: var(--dim); border: none; background: transparent; cursor: none; transition: all 0.2s; border-right: 1px solid var(--rule); position: relative; }
+.flow-tab:last-child { border-right: none; }
+.flow-tab.active { background: var(--ink); color: var(--gold); }
+.flow-tab.done { color: var(--gold-dark); }
+.flow-tab.done::after { content: '✓'; margin-left: 0.5rem; }
+.flow-tab.locked-tab { opacity: 0.4; }
+.flow-body { padding: 2.5rem; }
+
+/* Step 1 — société */
+.step-title-sm { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
+.step-desc-sm { font-size: 0.85rem; color: var(--dim); margin-bottom: 1.75rem; line-height: 1.6; }
+.field-group { margin-bottom: 1.25rem; }
+.field-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 0.4rem; display: block; }
+.field-input { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--rule); background: var(--paper); font-family: 'Instrument Sans', sans-serif; font-size: 0.9rem; color: var(--ink); outline: none; transition: border-color 0.2s; }
+.field-input:focus { border-color: var(--gold); }
+.field-input::placeholder { color: rgba(90,80,71,0.4); }
+textarea.field-input { resize: vertical; min-height: 100px; font-size: 0.85rem; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* Upload zone */
+.upload-zone { border: 1.5px dashed var(--rule); padding: 1.75rem; text-align: center; cursor: none; transition: all 0.2s; margin-bottom: 1.25rem; }
+.upload-zone:hover { border-color: var(--gold); background: rgba(200,168,75,0.03); }
+.upload-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.upload-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin-bottom: 0.25rem; }
+.upload-hint { font-size: 0.75rem; color: rgba(90,80,71,0.5); }
+.upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+
+/* Profile questions */
+.profile-q { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+.q-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 0.4rem; display: block; }
+.q-options { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.q-opt { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.45rem 1rem; border: 1px solid var(--rule); background: var(--paper); color: var(--dim); cursor: none; transition: all 0.18s; }
+.q-opt:hover { border-color: var(--ink); color: var(--ink); }
+.q-opt.sel { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* CTA step */
+.step-cta { display: flex; gap: 1rem; align-items: center; margin-top: 2rem; flex-wrap: wrap; }
+.btn-step { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.9rem 2rem; cursor: none; border: none; transition: all 0.2s; }
+.btn-step-primary { background: var(--ink); color: var(--paper); }
+.btn-step-primary:hover { background: var(--gold); color: var(--ink); }
+.btn-step-ghost { background: transparent; color: var(--dim); border: 1px solid var(--rule); }
+.btn-step-ghost:hover { border-color: var(--ink); color: var(--ink); }
+.step-note { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+
+/* ——— APERÇU RAPPORT FREEMIUM ——— */
+.preview-section { padding: 6rem 4rem; background: var(--cream); }
+.preview-container { max-width: 760px; margin: 3rem auto 0; border: 1px solid var(--rule); background: var(--paper); }
+.preview-header { background: var(--ink); color: var(--paper); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: flex-start; }
+.ph-company { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
+.ph-sector { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-top: 0.25rem; }
+.ph-badge { font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.75rem; border: 1px solid var(--gold); color: var(--gold); }
+.preview-body { padding: 2.5rem; }
+.preview-block { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--rule); }
+.preview-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.pb-title { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 1rem; }
+.pb-content { font-size: 0.88rem; line-height: 1.7; color: var(--dim); }
+
+/* Signal rows */
+.signal-rows { display: flex; flex-direction: column; gap: 0.6rem; }
+.sig-row { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.6rem; background: var(--cream); }
+.sig-icon { font-size: 0.8rem; flex-shrink: 0; margin-top: 0.05rem; }
+.sig-text { font-size: 0.82rem; line-height: 1.45; color: var(--ink); }
+.sig-source { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.08em; color: var(--dim); margin-top: 0.2rem; }
+
+/* Locked content — le coeur du freemium */
+.locked-block { position: relative; margin-bottom: 2rem; }
+.locked-content { filter: blur(4.5px); user-select: none; pointer-events: none; opacity: 0.55; }
+.locked-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(245,240,232,0.15); }
+.locked-badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.4rem 1rem; background: var(--ink); color: var(--gold); margin-bottom: 0.75rem; }
+.locked-cta { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.7rem 1.75rem; background: var(--gold); color: var(--ink); border: none; cursor: none; font-weight: 600; transition: background 0.2s; }
+.locked-cta:hover { background: var(--gold-light); }
+
+/* Paywall banner */
+.paywall-banner { background: var(--ink); color: var(--paper); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.pw-left {}
+.pw-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+.pw-sub { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+.pw-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.pw-item { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border: 1px solid rgba(245,240,232,0.15); color: rgba(245,240,232,0.5); }
+.pw-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem; }
+.pw-price { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--gold); line-height: 1; }
+.pw-price span { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: rgba(245,240,232,0.35); vertical-align: middle; margin-left: 0.25rem; }
+.btn-pay { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.9rem 2.5rem; background: var(--gold); color: var(--ink); border: none; cursor: none; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
+.btn-pay:hover { background: var(--gold-light); }
+
+/* ——— TEST TECHNIQUE ——— */
+.test-section { padding: 6rem 4rem; background: var(--ink); color: var(--paper); }
+.test-section .section-tag { color: rgba(200,168,75,0.6); }
+.test-section .section-tag::before { background: rgba(200,168,75,0.6); }
+.test-section .section-title { color: var(--paper); }
+.test-section .section-sub { color: rgba(245,240,232,0.5); }
+.test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid rgba(245,240,232,0.08); margin-top: 3rem; }
+.test-card { padding: 2rem; border-right: 1px solid rgba(245,240,232,0.08); position: relative; }
+.test-card:last-child { border-right: none; }
+.test-card-tag { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--rule-gold); padding: 0.2rem 0.6rem; display: inline-block; margin-bottom: 1rem; }
+.test-card-sector { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 0.5rem; }
+.test-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--paper); }
+.test-card-q { font-size: 0.82rem; color: rgba(245,240,232,0.65); line-height: 1.55; margin-bottom: 1rem; }
+.test-card-hint { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(200,168,75,0.6); }
+.test-note { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.2); text-align: center; margin-top: 2rem; }
+
+/* ——— WHAT'S INSIDE ——— */
+.inside-section { padding: 6rem 4rem; background: var(--cream); }
+.inside-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+.inside-list { display: flex; flex-direction: column; gap: 0; }
+.inside-item { display: grid; grid-template-columns: 2.5rem 1fr; gap: 1.25rem; align-items: start; padding: 1.25rem 0; border-bottom: 1px solid var(--rule); transition: padding-left 0.2s; cursor: none; }
+.inside-item:first-child { border-top: 1px solid var(--rule); }
+.inside-item:hover { padding-left: 0.4rem; }
+.inside-num { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--gold-dark); padding-top: 0.15rem; }
+.inside-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+.inside-desc { font-size: 0.8rem; line-height: 1.5; color: var(--dim); }
+.inside-lock { font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-dark); border: 1px solid var(--rule-gold); padding: 0.15rem 0.5rem; margin-left: 0.5rem; vertical-align: middle; }
+.inside-demo { position: sticky; top: 7rem; background: var(--ink); padding: 2rem; color: var(--paper); }
+.demo-hdr { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(245,240,232,0.08); }
+.demo-row { padding: 0.9rem 0; border-bottom: 1px solid rgba(245,240,232,0.06); font-size: 0.78rem; color: rgba(245,240,232,0.7); display: flex; gap: 0.75rem; align-items: flex-start; }
+.demo-row:last-child { border-bottom: none; }
+.demo-icon { flex-shrink: 0; margin-top: 0.05rem; }
+
+/* ——— TESTIMONIALS ——— */
+.testimonial-section { padding: 6rem 4rem; }
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 3rem; background: var(--rule); }
+.testimonial-card { background: var(--paper); padding: 2.5rem 2rem; }
+.testimonial-quote { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-style: italic; line-height: 1.7; color: var(--ink); margin-bottom: 1.5rem; }
+.testimonial-quote::before { content: '"'; color: var(--gold-dark); font-size: 1.8rem; line-height: 0; vertical-align: -0.45rem; margin-right: 0.2rem; }
+.testimonial-name { font-family: 'Instrument Sans', sans-serif; font-size: 0.82rem; font-weight: 600; }
+.testimonial-role { font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 0.08em; color: var(--dim); text-transform: uppercase; }
+
+/* ——— PRICING ——— */
+.pricing-section { background: var(--ink); padding: 6rem 4rem; color: var(--paper); }
+.pricing-section .section-tag { color: rgba(200,168,75,0.6); }
+.pricing-section .section-tag::before { background: rgba(200,168,75,0.6); }
+.pricing-section .section-title { color: var(--paper); }
+.pricing-section .section-sub { color: rgba(245,240,232,0.45); }
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid rgba(245,240,232,0.08); margin-top: 3rem; max-width: 680px; }
+.pricing-card { padding: 2.5rem 2rem; border-right: 1px solid rgba(245,240,232,0.08); }
+.pricing-card:last-child { border-right: none; background: rgba(200,168,75,0.05); }
+.pricing-badge { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--rule-gold); padding: 0.2rem 0.65rem; display: inline-block; margin-bottom: 1.25rem; }
+.pricing-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--paper); margin-bottom: 0.75rem; }
+.pricing-amount { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: var(--paper); line-height: 1; }
+.pricing-period { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; color: rgba(245,240,232,0.3); margin-left: 0.2rem; }
+.pricing-desc { font-size: 0.78rem; color: rgba(245,240,232,0.4); line-height: 1.55; margin: 0.75rem 0 1.5rem; }
+.pricing-feats { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+.pricing-feat { font-size: 0.8rem; color: rgba(245,240,232,0.65); display: flex; gap: 0.6rem; }
+.pricing-feat::before { content: '—'; color: var(--gold); font-family: 'DM Mono', monospace; flex-shrink: 0; }
+.btn-price { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.85rem 1.5rem; width: 100%; cursor: none; transition: all 0.2s; border: none; }
+.btn-price-outline { background: transparent; border: 1px solid rgba(245,240,232,0.15); color: rgba(245,240,232,0.55); }
+.btn-price-outline:hover { border-color: var(--paper); color: var(--paper); }
+.btn-price-gold { background: var(--gold); color: var(--ink); font-weight: 600; }
+.btn-price-gold:hover { background: var(--gold-light); }
+
+/* ——— CTA FINAL ——— */
+.cta-section { padding: 8rem 4rem; text-align: center; position: relative; overflow: hidden; }
+.cta-section::before { content: 'JOBBRIEF'; position: absolute; font-family: 'Playfair Display', serif; font-size: 18vw; font-weight: 900; color: var(--rule); top: 50%; left: 50%; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; z-index: 0; }
+.cta-inner { position: relative; z-index: 1; }
+.cta-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4.5vw, 4.5rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+.cta-title em { font-style: italic; color: var(--gold-dark); }
+.cta-sub { font-size: 0.95rem; color: var(--dim); max-width: 44ch; margin: 0 auto 2.5rem; line-height: 1.75; }
+.cta-form { display: flex; max-width: 460px; margin: 0 auto; border: 1px solid var(--ink); }
+.cta-input { flex: 1; padding: 0.9rem 1.25rem; border: none; background: transparent; font-family: 'Instrument Sans', sans-serif; font-size: 0.88rem; color: var(--ink); outline: none; }
+.cta-input::placeholder { color: var(--dim); }
+.cta-btn { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.9rem 1.75rem; background: var(--ink); color: var(--paper); border: none; cursor: none; white-space: nowrap; transition: background 0.2s; }
+.cta-btn:hover { background: var(--gold); color: var(--ink); }
+.cta-note { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; color: var(--dim); margin-top: 0.85rem; text-transform: uppercase; }
+
+/* ——— FOOTER ——— */
+footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid var(--gold); }
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900; color: var(--paper); }
+.footer-logo span { color: var(--gold); }
+.footer-copy { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; color: rgba(245,240,232,0.22); text-transform: uppercase; }
+.footer-links { display: flex; gap: 1.75rem; }
+.footer-links a { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.28); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--gold); }
+
+/* ——— ANIMATIONS ——— */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ——— MODAL ——— */
+.modal-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.8); z-index: 500; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--paper); padding: 3rem; max-width: 440px; width: 90%; position: relative; border-top: 3px solid var(--gold); }
+.modal-close { position: absolute; top: 1rem; right: 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--dim); cursor: none; border: none; background: transparent; letter-spacing: 0.1em; text-transform: uppercase; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.modal-sub { font-size: 0.85rem; color: var(--dim); line-height: 1.6; margin-bottom: 1.75rem; }
+.modal-form { display: flex; flex-direction: column; gap: 0.75rem; }
+.modal-input { padding: 0.8rem 1rem; border: 1px solid var(--rule); background: transparent; font-family: 'Instrument Sans', sans-serif; font-size: 0.9rem; color: var(--ink); outline: none; transition: border-color 0.2s; }
+.modal-input:focus { border-color: var(--gold); }
+.modal-btn { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.9rem; background: var(--ink); color: var(--paper); border: none; cursor: none; transition: background 0.2s; }
+.modal-btn:hover { background: var(--gold); color: var(--ink); }
+.modal-legal { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.06em; color: var(--dim); text-align: center; margin-top: 0.5rem; }
+
+/* ——— RESPONSIVE ——— */
+@media (max-width: 900px) {
+  header { padding: 1.25rem 1.5rem; }
+  nav { display: none; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { padding: 7rem 1.5rem 3rem; }
+  .hero-right { padding: 0 1.5rem 4rem; }
+  .report-card { box-shadow: 10px 10px 0 var(--gold); }
+  .trust-bar { padding: 1.5rem; gap: 2rem; }
+  .audience-section, .flow-section, .preview-section, .test-section, .inside-section, .testimonial-section, .pricing-section { padding: 4rem 1.5rem; }
+  .test-grid, .testimonial-grid { grid-template-columns: 1fr; }
+  .test-card { border-right: none; border-bottom: 1px solid rgba(245,240,232,0.08); }
+  .inside-grid { grid-template-columns: 1fr; }
+  .inside-demo { display: none; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+  .upload-grid { grid-template-columns: 1fr; }
+  .flow-tabs { flex-wrap: wrap; }
+  .paywall-banner { flex-direction: column; align-items: flex-start; }
+  .pw-right { align-items: flex-start; }
+  .cta-section { padding: 5rem 1.5rem; }
+  .cta-form { flex-direction: column; border: none; gap: 0.5rem; }
+  .cta-input { border: 1px solid var(--ink); }
+  .cta-btn { width: 100%; }
+  footer { flex-direction: column; gap: 1.25rem; padding: 2rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MODAL pré-inscription -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕ Fermer</button>
+    <div class="modal-title">Votre premier rapport est gratuit.</div>
+    <div class="modal-sub">Laissez votre email. On vous envoie un aperçu du rapport — les 3 premiers signaux clés, les dirigeants, le contexte financier. Pour débloquer la suite et les questions d'entretien personnalisées : 9€.</div>
+    <div class="modal-form">
+      <input type="email" class="modal-input" placeholder="votre@email.com">
+      <input type="text" class="modal-input" placeholder="Société cible (ex : un cabinet TS, une ETI, une fondation…)">
+      <input type="text" class="modal-input" placeholder="Poste visé (ex : CFO, Analyste TS, Stagiaire…)">
+      <button class="modal-btn">Recevoir mon aperçu gratuit →</button>
+    </div>
+    <div class="modal-legal">Aucune carte bancaire · Données non revendues · Résultats en 30 min</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">Job<span>Brief</span></a>
+  <nav>
+    <a href="#flow">Comment ça marche</a>
+    <a href="#inside">Le rapport</a>
+    <a href="#tarifs">Tarifs</a>
+  </nav>
+  <button class="btn-nav" onclick="openModal()">Essai gratuit</button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Du stage au poste de direction — pour tout entretien qui compte</div>
+    <h1 class="hero-title">
+      Vous avez un entretien.<br>
+      <em>Ils savent tout.</em><br>
+      Vous aussi, maintenant.
+    </h1>
+    <p class="hero-sub">
+      JobBrief analyse n'importe quelle société en 30 minutes : santé financière réelle, dirigeants, signaux internes, culture, et les questions exactes qu'ils vont vous poser — calibrées sur votre profil et l'offre.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openModal()">Analyser ma société — gratuit</button>
+      <button class="btn-ghost" onclick="document.getElementById('preview-anchor').scrollIntoView({behavior:'smooth'})">Voir un exemple →</button>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="report-card">
+      <div class="rc-header">
+        <div>
+          <div class="rc-company">Groupe Industriel XYZ</div>
+          <div class="rc-sector">ETI familiale — Logistique & Distribution</div>
+        </div>
+        <div class="rc-badge">CFO · Candidat</div>
+      </div>
+      <div class="signal-list">
+        <div class="signal-item"><span class="sdot dot-g"></span>CA groupe 2024 : 62M€ — croissance +18% sur 3 ans. Données fraîches sourcées et vérifiées.</div>
+        <div class="signal-item"><span class="sdot dot-a"></span>Transmission familiale en cours — 2e génération impliquée. Enjeu politique interne clé pour le CFO entrant.</div>
+        <div class="signal-item"><span class="sdot dot-g"></span>Great Place To Work 7 ans consécutifs — culture bienveillance filtre non négociable dans le recrutement.</div>
+        <div class="signal-item locked"><span class="sdot dot-r"></span>DAF en poste identifié — clarifier si remplacement ou création de poste avant l'entretien.</div>
+        <div class="signal-item locked"><span class="sdot dot-a"></span>Investissement robotisation déployé — 8–12M€ à refinancer dans le plan d'expansion en cours.</div>
+      </div>
+      <div class="unlock-hint">🔒 2 signaux supplémentaires — débloquer le rapport complet</div>
+      <div class="rc-footer">
+        <div class="rc-meta">Aperçu gratuit · 40+ sources</div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--gold)">9€ pour tout débloquer →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <div class="trust-num">40+</div>
+    <div class="trust-label">Sources croisées<br>par rapport</div>
+  </div>
+  <div class="trust-sep"></div>
+  <div class="trust-item">
+    <div class="trust-num">30</div>
+    <div class="trust-label">Minutes pour<br>un rapport complet</div>
+  </div>
+  <div class="trust-sep"></div>
+  <div class="trust-item">
+    <div class="trust-num">0</div>
+    <div class="trust-label">Hallucination —<br>tout est sourcé</div>
+  </div>
+  <div class="trust-sep"></div>
+  <div class="trust-item">
+    <div class="trust-num">9€</div>
+    <div class="trust-label">Rapport complet<br>payé une fois</div>
+  </div>
+</div>
+
+<!-- AUDIENCE -->
+<section class="audience-section">
+  <div class="audience-intro">— Pour qui —</div>
+  <h2 class="audience-title">Votre prochain entretien,<br><em style="font-style:italic;color:var(--gold-dark)">quel que soit votre niveau.</em></h2>
+  <p class="audience-sub">Du premier stage au poste de direction, JobBrief adapte le rapport à votre profil et à l'offre. Cliquez sur votre situation.</p>
+  <div class="audience-pills">
+    <div class="pill featured" onclick="setAudience(this)">🎓 Stagiaire / Alternant</div>
+    <div class="pill" onclick="setAudience(this)">📊 Jeune diplômé</div>
+    <div class="pill" onclick="setAudience(this)">💼 Manager (5-10 ans)</div>
+    <div class="pill" onclick="setAudience(this)">🏦 Finance — TS / M&A / PE</div>
+    <div class="pill" onclick="setAudience(this)">⚖️ Droit — cabinet</div>
+    <div class="pill" onclick="setAudience(this)">🏭 Industrie / ETI</div>
+    <div class="pill" onclick="setAudience(this)">🎯 Directeur / C-suite</div>
+    <div class="pill" onclick="setAudience(this)">🔄 Prise de poste</div>
+  </div>
+  <div id="audienceDesc" style="margin-top:2rem;max-width:52ch;margin-left:auto;margin-right:auto;font-size:0.88rem;color:var(--dim);line-height:1.7;min-height:3rem;transition:opacity 0.3s;font-style:italic;text-align:center;"></div>
+</section>
+
+<!-- FLOW — LE PRODUIT -->
+<section class="flow-section" id="flow">
+  <div class="flow-header">
+    <div class="section-tag">Comment ça marche</div>
+    <h2 class="section-title">4 étapes.<br>Un rapport sur mesure.</h2>
+    <p class="section-sub">JobBrief croise votre profil et l'offre pour calibrer exactement les questions qu'ils vont vous poser — technique, interpersonnel, vision stratégique.</p>
+  </div>
+
+  <div class="flow-app reveal">
+    <div class="flow-tabs">
+      <button class="flow-tab active" id="tab1" onclick="showStep(1)">01 — La société</button>
+      <button class="flow-tab" id="tab2" onclick="showStep(2)">02 — Votre profil</button>
+      <button class="flow-tab" id="tab3" onclick="showStep(3)">03 — Documents</button>
+      <button class="flow-tab locked-tab" id="tab4">04 — Rapport</button>
+    </div>
+
+    <!-- Étape 1 -->
+    <div class="flow-body" id="step1">
+      <div class="step-title-sm">Quelle société analysons-nous ?</div>
+      <div class="step-desc-sm">Entrez le nom exact. JobBrief identifie automatiquement la structure juridique, le secteur et les dernières données publiques.</div>
+      <div class="field-group">
+        <label class="field-label">Nom de la société *</label>
+        <input type="text" class="field-input" placeholder="ex : un cabinet de conseil, une ETI industrielle, une fondation, un groupe familial…" id="companyInput">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Poste visé *</label>
+          <input type="text" class="field-input" placeholder="ex : CFO, Analyste TS, DAF…">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Type d'entretien</label>
+          <input type="text" class="field-input" placeholder="ex : 1er entretien, RH, Associé…">
+        </div>
+      </div>
+      <div class="step-cta">
+        <button class="btn-step btn-step-primary" onclick="showStep(2)">Continuer →</button>
+        <div class="step-note">Gratuit · Sans carte bancaire</div>
+      </div>
+    </div>
+
+    <!-- Étape 2 -->
+    <div class="flow-body" id="step2" style="display:none">
+      <div class="step-title-sm">Votre profil — pour calibrer les questions.</div>
+      <div class="step-desc-sm">JobBrief adapte les 3 blocs de questions (technique, interpersonnel, vision 360) à qui vous êtes — pas un rapport générique.</div>
+      <div class="profile-q">
+        <div>
+          <span class="q-label">Votre niveau d'expérience</span>
+          <div class="q-options">
+            <button class="q-opt" onclick="sel(this,'niv')">Stage / Alternance</button>
+            <button class="q-opt" onclick="sel(this,'niv')">0–3 ans</button>
+            <button class="q-opt" onclick="sel(this,'niv')">3–8 ans</button>
+            <button class="q-opt" onclick="sel(this,'niv')">8–15 ans</button>
+            <button class="q-opt" onclick="sel(this,'niv')">15 ans+</button>
+          </div>
+        </div>
+        <div>
+          <span class="q-label">Votre domaine</span>
+          <div class="q-options">
+            <button class="q-opt" onclick="sel(this,'dom')">Finance / Audit</button>
+            <button class="q-opt" onclick="sel(this,'dom')">Transaction Services</button>
+            <button class="q-opt" onclick="sel(this,'dom')">M&A / PE / VC</button>
+            <button class="q-opt" onclick="sel(this,'dom')">Droit des affaires</button>
+            <button class="q-opt" onclick="sel(this,'dom')">Direction générale</button>
+            <button class="q-opt" onclick="sel(this,'dom')">RH / Conseil</button>
+            <button class="q-opt" onclick="sel(this,'dom')">Autre</button>
+          </div>
+        </div>
+        <div>
+          <span class="q-label">Ce qui vous inquiète le plus dans cet entretien</span>
+          <div class="q-options">
+            <button class="q-opt" onclick="sel(this,'worry')">Les questions techniques</button>
+            <button class="q-opt" onclick="sel(this,'worry')">Les questions "qui êtes-vous"</button>
+            <button class="q-opt" onclick="sel(this,'worry')">Ne pas connaître la société</button>
+            <button class="q-opt" onclick="sel(this,'worry')">Négocier le package</button>
+            <button class="q-opt" onclick="sel(this,'worry')">Me démarquer des autres candidats</button>
+          </div>
+        </div>
+      </div>
+      <div class="step-cta">
+        <button class="btn-step btn-step-ghost" onclick="showStep(1)">← Retour</button>
+        <button class="btn-step btn-step-primary" onclick="showStep(3)">Continuer →</button>
+      </div>
+    </div>
+
+    <!-- Étape 3 -->
+    <div class="flow-body" id="step3" style="display:none">
+      <div class="step-title-sm">Uploadez l'offre et votre CV.</div>
+      <div class="step-desc-sm">JobBrief croise les deux pour cibler exactement ce qu'ils vont vous demander — et trouver les points de friction ou de cohérence entre votre parcours et leurs attentes.</div>
+      <div class="upload-grid">
+        <div>
+          <div class="field-label" style="margin-bottom:0.5rem">Offre d'emploi *</div>
+          <div class="upload-zone" onclick="triggerUpload('offerFile')">
+            <div class="upload-icon">📄</div>
+            <div class="upload-label">Glissez ou cliquez</div>
+            <div class="upload-hint">PDF · Word · ou collez le texte ci-dessous</div>
+          </div>
+          <input type="file" id="offerFile" style="display:none" accept=".pdf,.doc,.docx">
+          <textarea class="field-input" placeholder="Ou collez le texte de l'offre ici…" style="margin-top:0.5rem"></textarea>
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:0.5rem">Votre CV</div>
+          <div class="upload-zone" onclick="triggerUpload('cvFile')">
+            <div class="upload-icon">👤</div>
+            <div class="upload-label">Glissez ou cliquez</div>
+            <div class="upload-hint">PDF · Word · ou collez votre URL LinkedIn</div>
+          </div>
+          <input type="file" id="cvFile" style="display:none" accept=".pdf,.doc,.docx">
+          <input type="text" class="field-input" placeholder="Ou votre URL LinkedIn…" style="margin-top:0.5rem">
+        </div>
+      </div>
+      <div style="margin-bottom:1.25rem">
+        <label class="field-label">Informations complémentaires (optionnel)</label>
+        <textarea class="field-input" placeholder="Contexte particulier : vous connaissez quelqu'un dans cette société, vous avez déjà passé un 1er entretien, vous postulez en interne…" style="min-height:70px"></textarea>
+      </div>
+      <div class="step-cta">
+        <button class="btn-step btn-step-ghost" onclick="showStep(2)">← Retour</button>
+        <button class="btn-step btn-step-primary" onclick="generatePreview()">Générer mon aperçu gratuit →</button>
+        <div class="step-note">Résultats en 30 min · 1 rapport gratuit</div>
+      </div>
+    </div>
+
+    <!-- Étape 4 placeholder -->
+    <div class="flow-body" id="step4" style="display:none">
+      <div style="text-align:center;padding:2rem 0">
+        <div style="font-size:2.5rem;margin-bottom:1rem">⏳</div>
+        <div class="step-title-sm" style="text-align:center">Analyse en cours…</div>
+        <div class="step-desc-sm" style="text-align:center;margin:0 auto">JobBrief croise 40+ sources sur votre société cible. Résultats dans quelques minutes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APERÇU RAPPORT — FREEMIUM -->
+<section class="preview-section" id="preview-anchor">
+  <div class="section-tag">Exemple de rapport</div>
+  <h2 class="section-title">Ce que vous obtenez<br><em style="font-style:italic;color:var(--gold-dark)">gratuitement.</em></h2>
+  <p class="section-sub">Et ce qui reste grisé — jusqu'au paiement.</p>
+
+  <div class="preview-container reveal">
+    <div class="preview-header">
+      <div>
+        <div class="ph-company">Valence Advisory</div>
+        <div class="ph-sector">Transaction Services · Mid-Cap · Big4 — Paris 8e</div>
+      </div>
+      <div class="ph-badge">Analyste TS · Stage fin d'études · Grande École</div>
+    </div>
+
+    <div class="preview-body">
+
+      <!-- BLOC GRATUIT 1 — Executive summary -->
+      <div class="preview-block">
+        <div class="pb-title">— Executive Summary —</div>
+        <div class="pb-content">Cabinet de Transaction Services intégré dans l'un des quatre grands réseaux d'audit mondial. Pratique TS Paris : 120+ professionnels, spécialisation mid-cap (EBITDA 10–150M€). En 2025 : classé Top 3 en volume de due diligences financières sur le segment LBO mid-cap en France selon les palmarès sectoriels annuels. Croissance du nombre de mandats de +22% vs 2023. Culture d'excellence technique et de volumétrie élevée — les stagiaires sont mis en situation dès la première semaine.</div>
+      </div>
+
+      <!-- BLOC GRATUIT 2 — Signaux clés -->
+      <div class="preview-block">
+        <div class="pb-title">— 3 signaux clés — <span style="font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--gold-dark)">calibrés sur votre profil</span></div>
+        <div class="signal-rows">
+          <div class="sig-row">
+            <div class="sig-icon">✅</div>
+            <div>
+              <div class="sig-text">Top 3 volume TS mid-cap France 2025 — classements sectoriels annuels. Présence dans 80%+ des deals LBO entre 50 et 500M€ de valeur d'entreprise.</div>
+              <div class="sig-source">Palmarès Transaction Services 2025 · Confiance haute</div>
+            </div>
+          </div>
+          <div class="sig-row">
+            <div class="sig-icon">✅</div>
+            <div>
+              <div class="sig-text">Pratique ESG TS lancée en 2024 — due diligences extra-financières intégrées aux mandats. Signal de montée en gamme et d'adaptation aux exigences CSRD des fonds PE.</div>
+              <div class="sig-source">Site cabinet + presse sectorielle · Confiance haute</div>
+            </div>
+          </div>
+          <div class="sig-row">
+            <div class="sig-icon">⚠️</div>
+            <div>
+              <div class="sig-text">Le cabinet exige systématiquement une première expérience en audit, TS ou PE. Votre stage en finance d'entreprise est analytiquement pertinent mais n'est pas équivalent — ce pont doit être construit mot pour mot avant l'entretien.</div>
+              <div class="sig-source">Offres Glassdoor + témoignages recrutement · HAUTE — alerte spécifique profil Grande École sans expérience TS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOC GRATUIT 3 — Interlocuteur -->
+      <div class="preview-block">
+        <div class="pb-title">— Votre interlocuteur — Associé TS</div>
+        <div class="pb-content">Associé responsable du recrutement TS Paris. Formation grande école de commerce + passage Big4 en audit avant de rejoindre la practice TS. 15+ ans d'expérience, 300+ transactions. Ce qu'il attend en entretien : rigueur technique (le cas Excel est discriminant), compréhension réelle du métier TS vs audit/corporate, et une réponse authentique à "pourquoi ce cabinet plutôt qu'une boutique indépendante". <strong>À ne pas dire :</strong> "pour apprendre le métier" ou "pour les exits".</div>
+      </div>
+
+      <!-- BLOC GRISÉ — Questions d'entretien -->
+      <div class="locked-block">
+        <div class="pb-title" style="margin-bottom:0.75rem">— Questions qu'ils vont vous poser (3 blocs) —</div>
+        <div class="locked-content">
+          <div class="signal-rows">
+            <div class="sig-row"><div class="sig-icon">💼</div><div class="sig-text"><strong>Technique :</strong> Comment feriez-vous le lien entre votre expérience en finance d'entreprise et le métier du TS ? [Réponse guidée mot pour mot incluse]</div></div>
+            <div class="sig-row"><div class="sig-icon">💼</div><div class="sig-text"><strong>Technique :</strong> Qu'est-ce qu'un ajustement EBITDA — donnez 3 exemples concrets et expliquez pourquoi ils sont retraités. [Réponse attendue par ce cabinet]</div></div>
+            <div class="sig-row"><div class="sig-icon">👤</div><div class="sig-text"><strong>Interpersonnel :</strong> Décrivez une situation où vous avez travaillé sous pression avec un délai très court. [Angle attendu : précision + sang-froid]</div></div>
+            <div class="sig-row"><div class="sig-icon">👤</div><div class="sig-text"><strong>Interpersonnel :</strong> Qu'est-ce qui vous attire ici plutôt que dans une boutique indépendante ou une banque ? [3 arguments calibrés sur ce cabinet spécifiquement]</div></div>
+            <div class="sig-row"><div class="sig-icon">🔭</div><div class="sig-text"><strong>Vision 360 :</strong> Comment analysez-vous l'impact de la montée des taux sur le marché LBO mid-cap — et pourquoi les volumes TS restent soutenus malgré tout ? [Réponse stratégique construite]</div></div>
+          </div>
+        </div>
+        <div class="locked-overlay">
+          <div class="locked-badge">🔒 Contenu complet — rapport payant</div>
+          <button class="locked-cta" onclick="openModal()">Débloquer pour 9€ →</button>
+        </div>
+      </div>
+
+      <!-- BLOC GRISÉ — Test technique -->
+      <div class="locked-block">
+        <div class="pb-title" style="margin-bottom:0.75rem">— Test technique intégré : reconstitution Balance Générale → P&L → Bilan —</div>
+        <div class="locked-content" style="padding:1rem;background:var(--cream);font-size:0.82rem;color:var(--dim);line-height:1.6">
+          Le cas technique de ce cabinet = reconstitution complète d'un état financier depuis une balance générale de 80 lignes. 45 minutes, format Excel. Inclus dans le rapport : jeu de données réel, guide étape par étape, 5 erreurs classiques à éviter, et grille de correction. Résultats de candidats recrutés pour comparaison.
+        </div>
+        <div class="locked-overlay">
+          <div class="locked-badge">🔒 Cas Excel complet + correction</div>
+          <button class="locked-cta" onclick="openModal()">Débloquer pour 9€ →</button>
+        </div>
+      </div>
+
+      <!-- BLOC GRISÉ — Questions à poser -->
+      <div class="locked-block">
+        <div class="pb-title" style="margin-bottom:0.75rem">— 5 questions intelligentes à poser à l'associé —</div>
+        <div class="locked-content">
+          <div class="signal-rows">
+            <div class="sig-row"><div class="sig-text">Sur quel type de mandat un stagiaire est-il mis en autonomie dès la première semaine — buy-side ou VDD ? [Ce que la réponse révèle sur la culture du cabinet]</div></div>
+            <div class="sig-row"><div class="sig-text">Comment s'articule la pratique ESG TS lancée en 2024 avec les missions financières classiques — est-ce une ligne distincte ou intégrée ? [Montre que vous suivez l'actualité du cabinet]</div></div>
+            <div class="sig-row"><div class="sig-text">Avec la croissance des mandats en 2025, est-ce que le mid-cap supérieur (200–500M€) prend plus de place dans le deal flow ? [Révèle la trajectoire stratégique]</div></div>
+            <div class="sig-row"><div class="sig-text">Quelle est la proportion de stagiaires recrutés en CDI — et quel est le parcours type d'un analyste TS qui reste 3 ans ? [Montre que vous pensez long terme]</div></div>
+            <div class="sig-row"><div class="sig-text">Comment fonctionne le feedback sur les cas techniques — est-ce qu'on revoit la correction avec un senior après l'entretien ? [Révèle la culture de développement]</div></div>
+          </div>
+        </div>
+        <div class="locked-overlay">
+          <div class="locked-badge">🔒 5 questions + stratégie de pose</div>
+          <button class="locked-cta" onclick="openModal()">Débloquer pour 9€ →</button>
+        </div>
+      </div>
+
+    </div><!-- end preview-body -->
+
+    <!-- PAYWALL BANNER -->
+    <div class="paywall-banner">
+      <div class="pw-left">
+        <div class="pw-title">Débloquez le rapport complet.</div>
+        <div class="pw-sub">Tout ce que vous avez vu — et 9 sections supplémentaires.</div>
+        <div class="pw-list">
+          <div class="pw-item">Signaux complets (7+)</div>
+          <div class="pw-item">Questions 3 blocs + réponses guidées</div>
+          <div class="pw-item">Test technique + correction</div>
+          <div class="pw-item">Questions à poser à l'associé</div>
+          <div class="pw-item">Fourchette salariale</div>
+          <div class="pw-item">Ressources de préparation</div>
+          <div class="pw-item">Lois sectorielles clés</div>
+        </div>
+      </div>
+      <div class="pw-right">
+        <div class="pw-price">9€ <span>/ rapport</span></div>
+        <button class="btn-pay" onclick="openModal()">Obtenir le rapport complet →</button>
+        <div style="font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,240,232,0.25)">Paiement Stripe · Accès immédiat</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTS TECHNIQUES -->
+<section class="test-section">
+  <div class="section-tag">Tests techniques</div>
+  <h2 class="section-title" style="color:var(--paper)">Quand c'est pertinent,<br><em style="font-style:italic;color:var(--gold)">JobBrief vous entraîne.</em></h2>
+  <p class="section-sub">Certains entretiens ont un cas technique incontournable. JobBrief l'identifie et vous prépare — avec des exercices calibrés sur le poste.</p>
+
+  <div class="test-grid reveal">
+    <div class="test-card">
+      <div class="test-card-tag">Transaction Services</div>
+      <div class="test-card-sector">Cabinets TS indépendants · Big4 · Boutiques M&A</div>
+      <div class="test-card-title">Reconstitution BG → P&L → Bilan</div>
+      <div class="test-card-q">À partir d'une balance générale de 80 lignes, reconstituez le compte de résultat et identifiez 3 ajustements EBITDA. Durée : 45 min. Format Excel.</div>
+      <div class="test-card-hint">→ Inclus dans les rapports TS · Correction guidée + grille d'évaluation</div>
+    </div>
+    <div class="test-card">
+      <div class="test-card-tag">Private Equity · M&A</div>
+      <div class="test-card-sector">Boutiques · Fonds PE · Family Office</div>
+      <div class="test-card-title">LBO Paper Model</div>
+      <div class="test-card-q">Modélisation d'un LBO simple : structure dette, retour fonds, sensibilités EBITDA/levier. Les banques d'affaires testent souvent cela dès le 2e entretien.</div>
+      <div class="test-card-hint">→ Inclus dans rapports M&A · Pas de cod déductif</div>
+    </div>
+    <div class="test-card">
+      <div class="test-card-tag">CFO · DAF groupe</div>
+      <div class="test-card-sector">ETI · Industrie · Non lucratif</div>
+      <div class="test-card-title">Cash flow prévisionnel 12 mois</div>
+      <div class="test-card-q">À partir d'un P&L et d'hypothèses de variation BFR, construisez un budget de trésorerie mensuel. Question classique pour tous les CFO en entretien ETI.</div>
+      <div class="test-card-hint">→ Inclus dans rapports CFO · Grille d'évaluation</div>
+    </div>
+  </div>
+  <div class="test-note">Les tests techniques sont générés selon votre poste et votre secteur — pas tous les rapports en ont.</div>
+</section>
+
+<!-- INSIDE — CE QU'IL Y A DEDANS -->
+<section class="inside-section" id="inside">
+  <div class="section-tag">Le rapport complet</div>
+  <h2 class="section-title">12 sections.<br>Rien de superflu.</h2>
+  <p class="section-sub">Chaque section est sourcée, datée, et calibrée sur votre profil et le poste visé.</p>
+
+  <div class="inside-grid reveal">
+    <div class="inside-list">
+      <div class="inside-item">
+        <div class="inside-num">01</div>
+        <div><div class="inside-title">Executive Summary + KPIs</div><div class="inside-desc">Headline, chiffres clés vérifiés, signaux critiques sourcés. Ce qu'il faut savoir en 60 secondes.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">02</div>
+        <div><div class="inside-title">Business Model & Financier</div><div class="inside-desc">Revenus, marges, croissance CA, structure de capital, signaux de tension ou de solidité.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">03</div>
+        <div><div class="inside-title">Structure juridique</div><div class="inside-desc">Holding, filiales, actionnaires réels, historique des actes BODACC. Ce que personne ne cherche.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">04</div>
+        <div><div class="inside-title">Dirigeants & votre interlocuteur</div><div class="inside-desc">Profil complet de la personne qui vous reçoit : parcours, style, ce qui l'impressionne.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">05</div>
+        <div><div class="inside-title">Culture & alertes internes</div><div class="inside-desc">Glassdoor, signaux de départ, tensions identifiées. Ce qu'ils ne vous diront pas.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">06</div>
+        <div><div class="inside-title">Écosystème — clients, partenaires</div><div class="inside-desc">Qui travaille avec eux, qui les finance, qui sont leurs clients. Le contexte stratégique complet.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">07 <span class="inside-lock">💎 Complet</span></div>
+        <div><div class="inside-title">Questions qu'ils vont vous poser</div><div class="inside-desc">3 blocs : technique contextuel, interpersonnel, vision 360. Calibrées sur votre profil + l'offre. Avec angle de réponse attendu.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">08 <span class="inside-lock">💎 Complet</span></div>
+        <div><div class="inside-title">Test technique intégré</div><div class="inside-desc">Quand pertinent : cas Excel, LBO paper, cash flow. Avec correction et grille d'évaluation.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">09 <span class="inside-lock">💎 Complet</span></div>
+        <div><div class="inside-title">Questions intelligentes à poser</div><div class="inside-desc">Les questions qui montrent que vous avez vraiment travaillé — et ce que les réponses révèlent sur la société.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">10 <span class="inside-lock">💎 Complet</span></div>
+        <div><div class="inside-title">Fourchette salariale</div><div class="inside-desc">Benchmarks sectoriels contextualisés. Avec points de négociation spécifiques au poste.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">11 <span class="inside-lock">💎 Complet</span></div>
+        <div><div class="inside-title">Lois sectorielles clés</div><div class="inside-desc">Les réglementations que vous devez connaître pour impressionner en entretien — adaptées à votre secteur.</div></div>
+      </div>
+      <div class="inside-item">
+        <div class="inside-num">12 <span class="inside-lock">💎 Complet</span></div>
+        <div><div class="inside-title">Ressources de préparation</div><div class="inside-desc">Articles, rapports, podcasts — les 8-10 sources que lire absolument avant l'entretien.</div></div>
+      </div>
+    </div>
+
+    <div class="inside-demo">
+      <div class="demo-hdr">Aperçu — Signaux extraits du rapport</div>
+      <div class="demo-row"><div class="demo-icon">✅</div><div><strong>CA groupe 2024 : 62M€</strong> — source site officiel de la société. Croissance +18% sur 3 ans vérifiée.</div></div>
+      <div class="demo-row"><div class="demo-icon">⚠️</div><div>Transmission familiale 1re → 2e génération amorcée. Enjeu politique interne — clarifier votre positionnement entre les deux générations dès le 1er entretien.</div></div>
+      <div class="demo-row"><div class="demo-icon">✅</div><div>Investissement robotisation déployé — plan d'expansion en cours. CFO entrant = co-pilote du financement à 18 mois.</div></div>
+      <div class="demo-row"><div class="demo-icon">⚠️</div><div>DAF en poste identifié — clarifier si remplacement ou création de poste. Information critique à obtenir avant l'entretien.</div></div>
+      <div class="demo-row"><div class="demo-icon">✅</div><div>Great Place To Work 7 ans consécutifs. Culture bienveillance = filtre de recrutement non négociable pour le dirigeant.</div></div>
+      <div class="demo-row" style="filter:blur(3.5px);opacity:0.4;user-select:none"><div class="demo-icon">🔒</div><div>Filiale internationale — exposition devise étrangère, obligations locales, rapatriement dividendes à gérer.</div></div>
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(245,240,232,0.08);text-align:center">
+        <button class="btn-pay" style="font-size:0.65rem;padding:0.7rem 1.5rem" onclick="openModal()">Débloquer le rapport complet — 9€</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES -->
+<section class="testimonial-section">
+  <div class="section-tag">Ils ont utilisé JobBrief</div>
+  <h2 class="section-title">Ce qu'ils en disent.</h2>
+
+  <div class="testimonial-grid reveal">
+    <div class="testimonial-card">
+      <div class="testimonial-quote">J'ai su qu'un dirigeant clé venait de quitter le groupe avant même que ça soit annoncé. J'ai posé la question en entretien et j'ai vu leurs yeux s'agrandir. Ça a tout changé dans la dynamique.</div>
+      <div style="margin-top:auto">
+        <div class="testimonial-name">Claire D.</div>
+        <div class="testimonial-role">Directrice financière · En recherche active</div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-quote">Le rapport m'a expliqué exactement pourquoi mon stage en finance d'entreprise n'était pas directement transposable en TS — et comment l'expliquer mot pour mot. J'ai eu le stage dans le cabinet que je visais.</div>
+      <div style="margin-top:auto">
+        <div class="testimonial-name">Thomas R.</div>
+        <div class="testimonial-role">Stagiaire TS · Grande École · Paris</div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-quote">Le rapport avait identifié un signal financier précis sur une filiale que personne ne m'avait mentionné. J'ai posé la question directement — ils ont compris que j'avais vraiment travaillé le dossier. Ça a changé le ton de tout l'entretien.</div>
+      <div style="margin-top:auto">
+        <div class="testimonial-name">Marc L.</div>
+        <div class="testimonial-role">CFO · ETI industrielle · Prise de poste</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="tarifs">
+  <div class="section-tag">Tarifs</div>
+  <h2 class="section-title" style="color:var(--paper)">Simple.<br><em style="font-style:italic;color:var(--gold)">Deux options.</em></h2>
+  <p class="section-sub">L'aperçu gratuit pour voir si JobBrief est fait pour vous. Le rapport complet quand l'entretien est dans 48h.</p>
+
+  <div class="pricing-grid reveal">
+    <div class="pricing-card">
+      <div class="pricing-badge">Pour découvrir</div>
+      <div class="pricing-name">Aperçu</div>
+      <div><span class="pricing-amount">0€</span></div>
+      <div class="pricing-desc">L'executive summary, 3 signaux clés sourcés, le profil de votre interlocuteur. Sans carte bancaire.</div>
+      <div class="pricing-feats">
+        <div class="pricing-feat">Executive summary sourcé</div>
+        <div class="pricing-feat">3 signaux clés vérifiés</div>
+        <div class="pricing-feat">Profil de votre interlocuteur</div>
+        <div class="pricing-feat">Score de fraîcheur des données</div>
+        <div class="pricing-feat" style="color:rgba(245,240,232,0.25)">Questions d'entretien — grisées</div>
+        <div class="pricing-feat" style="color:rgba(245,240,232,0.25)">Tests techniques — grisés</div>
+      </div>
+      <button class="btn-price btn-price-outline" onclick="openModal()">Essayer gratuitement</button>
+    </div>
+
+    <div class="pricing-card">
+      <div class="pricing-badge">Rapport complet</div>
+      <div class="pricing-name">JobBrief</div>
+      <div><span class="pricing-amount">9€</span><span class="pricing-period">/ rapport</span></div>
+      <div class="pricing-desc">Le rapport complet — 12 sections, questions 3 blocs, test technique, fourchette salariale. Livré en 30 min.</div>
+      <div class="pricing-feats">
+        <div class="pricing-feat">Tout l'aperçu gratuit</div>
+        <div class="pricing-feat">7 signaux clés complets</div>
+        <div class="pricing-feat">Questions 3 blocs + réponses guidées</div>
+        <div class="pricing-feat">Test technique + correction</div>
+        <div class="pricing-feat">Questions à poser à l'interlocuteur</div>
+        <div class="pricing-feat">Fourchette salariale + négociation</div>
+        <div class="pricing-feat">Lois sectorielles + ressources</div>
+        <div class="pricing-feat">Export PDF</div>
+      </div>
+      <button class="btn-price btn-price-gold" onclick="openModal()">Obtenir mon rapport — 9€</button>
+    </div>
+  </div>
+
+  <p style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,240,232,0.2);text-align:center;margin-top:2rem">Paiement sécurisé · Stripe · Aucun abonnement · Accès immédiat · Données non revendues</p>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="section-tag" style="justify-content:center">Commencez maintenant</div>
+    <h2 class="cta-title">
+      Votre prochain entretien<br>
+      mérite mieux qu'une <em>recherche Google.</em>
+    </h2>
+    <p class="cta-sub">Entrez votre email. JobBrief vous envoie gratuitement l'executive summary et les 3 premiers signaux de votre société cible. Le rapport complet pour 9€.</p>
+    <form class="cta-form" onsubmit="handleCTA(event)">
+      <input type="email" class="cta-input" placeholder="votre@email.com" required>
+      <button type="submit" class="cta-btn">Je veux mon rapport →</button>
+    </form>
+    <div class="cta-note">Aucune carte bancaire · 1 aperçu gratuit · Résultats en 30 minutes</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Job<span>Brief</span></div>
+  <div class="footer-copy">© 2026 JobBrief · Intelligence société · Paris</div>
+  <div class="footer-links">
+    <a href="#">Mentions légales</a>
+    <a href="#">CGU</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+// ——— CURSOR ———
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+});
+(function animateRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+})();
+document.querySelectorAll('button,a,input,textarea,.upload-zone,.pill,.q-opt,.inside-item').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.style.width='48px'; ring.style.height='48px'; ring.style.opacity='0.8'; });
+  el.addEventListener('mouseleave', () => { ring.style.width='32px'; ring.style.height='32px'; ring.style.opacity='0.5'; });
+});
+
+// ——— MODAL ———
+function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+// ——— SCROLL REVEAL ———
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) { setTimeout(() => entry.target.classList.add('visible'), i * 80); revealObs.unobserve(entry.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ——— HEADER SCROLL ———
+const header = document.querySelector('header');
+window.addEventListener('scroll', () => { header.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(10,10,10,0.07)' : 'none'; });
+
+// ——— FLOW STEPS ———
+function showStep(n) {
+  [1,2,3,4].forEach(i => {
+    const body = document.getElementById('step'+i);
+    const tab = document.getElementById('tab'+i);
+    if (body) body.style.display = i === n ? 'block' : 'none';
+    if (tab) {
+      tab.classList.remove('active','done','locked-tab');
+      if (i < n) tab.classList.add('done');
+      else if (i === n) tab.classList.add('active');
+      else if (i > n && i === 4) tab.classList.add('locked-tab');
+    }
+  });
+}
+
+function generatePreview() {
+  showStep(4);
+  // Simuler un état de génération
+  const tab4 = document.getElementById('tab4');
+  tab4.classList.remove('locked-tab');
+  tab4.classList.add('active');
+  tab4.textContent = '04 — Génération…';
+  setTimeout(() => {
+    document.getElementById('preview-anchor').scrollIntoView({ behavior: 'smooth' });
+    tab4.textContent = '04 — Rapport ✓';
+    tab4.classList.remove('active');
+    tab4.classList.add('done');
+  }, 2000);
+}
+
+// ——— Q-OPT SELECTION ———
+function sel(el, group) {
+  el.closest('.q-options').querySelectorAll('.q-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// ——— AUDIENCE PILLS ———
+const audienceDescs = {
+  '🎓 Stagiaire / Alternant': "JobBrief identifie les questions techniques que le recruteur va poser selon votre école et votre expérience — et construit le pont entre ce que vous avez fait et ce qu'ils cherchent.",
+  '📊 Jeune diplômé': "Premier ou deuxième CDI : JobBrief vous aide à comprendre la culture réelle de la société, les attentes implicites du poste, et les questions qui vont différencier les candidats.",
+  '💼 Manager (5-10 ans)': "À ce stade, ils testent surtout votre capacité à prendre de la hauteur et à gérer des situations complexes. JobBrief vous prépare sur les 3 dimensions : technique, interpersonnel, vision.",
+  '🏦 Finance — TS / M&A / PE': "JobBrief intègre les cas techniques spécifiques (reconstitution BG, LBO paper, cash flow) et connaît les attentes précises des cabinets et fonds les plus courants.",
+  '⚖️ Droit — cabinet': "JobBrief analyse la structure du cabinet, les associés, le marché ciblé et les deals récents. Les questions calibrées sur la pratique spécifique sont incluses dans le rapport.",
+  '🏭 Industrie / ETI': "ETI familiale ou groupe industriel : JobBrief analyse la structure capitalistique, l'actionnaire de référence, et vous prépare sur les enjeux financiers spécifiques au secteur.",
+  '🎯 Directeur / C-suite': "À ce niveau, l'entretien est une conversation stratégique. JobBrief vous donne les éléments pour positionner votre vision dans le contexte précis de la société et de ses enjeux actuels.",
+  '🔄 Prise de poste': "Vous avez signé — maintenant JobBrief vous aide à cartographier les enjeux réels, les personnes clés, et les chantiers qui vous attendent. Pour ne pas perdre 3 mois à comprendre ce que vous auriez pu savoir avant."
+};
+
+function setAudience(el) {
+  document.querySelectorAll('.pill').forEach(p => { p.classList.remove('active'); });
+  el.classList.add('active');
+  const desc = document.getElementById('audienceDesc');
+  desc.style.opacity = '0';
+  setTimeout(() => { desc.textContent = audienceDescs[el.textContent.trim()] || ''; desc.style.opacity = '1'; }, 200);
+}
+// Init
+document.querySelector('.pill.featured') && setAudience(document.querySelector('.pill.featured'));
+
+// ——— FILE UPLOAD TRIGGERS ———
+function triggerUpload(id) { document.getElementById(id).click(); }
+document.getElementById('offerFile').addEventListener('change', e => {
+  if (e.target.files[0]) {
+    const zone = e.target.previousElementSibling;
+    zone.querySelector('.upload-label').textContent = e.target.files[0].name;
+    zone.querySelector('.upload-hint').textContent = 'Fichier chargé ✓';
+    zone.style.borderColor = 'var(--gold)';
+  }
+});
+document.getElementById('cvFile').addEventListener('change', e => {
+  if (e.target.files[0]) {
+    const zone = e.target.previousElementSibling;
+    zone.querySelector('.upload-label').textContent = e.target.files[0].name;
+    zone.querySelector('.upload-hint').textContent = 'Fichier chargé ✓';
+    zone.style.borderColor = 'var(--gold)';
+  }
+});
+
+// ——— CTA FORM ———
+function handleCTA(e) {
+  e.preventDefault();
+  openModal();
+}
+
+// ——— FEEDBACK WIDGET ———
+function toggleFeedback() {
+  const panel = document.getElementById('feedbackPanel');
+  panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+  if (panel.style.display === 'flex') panel.querySelector('textarea').focus();
+}
+function submitFeedback(e) {
+  e.preventDefault();
+  const btn = document.getElementById('feedbackBtn');
+  const msg = document.querySelector('#feedbackPanel textarea').value.trim();
+  if (!msg) return;
+  // Ici brancher sur Tally / Resend / Airtable — placeholder
+  document.getElementById('feedbackPanel').innerHTML = '<div style="padding:1.5rem;text-align:center;font-family:\'DM Mono\',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dark)">Merci — message reçu.<br><span style="color:var(--dim);font-size:0.6rem;margin-top:0.5rem;display:block">On vous répond sous 24h.</span></div>';
+  setTimeout(() => {
+    document.getElementById('feedbackPanel').style.display = 'none';
+    document.getElementById('feedbackPanel').innerHTML = originalFeedbackHTML;
+  }, 3000);
+}
+const originalFeedbackHTML = `
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <span style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dark)">Feedback · Signaler un problème</span>
+    <button onclick="toggleFeedback()" style="background:none;border:none;cursor:none;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--dim)">✕</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap">
+    <button class="fb-tag" onclick="setFbTag(this)">🐛 Bug</button>
+    <button class="fb-tag" onclick="setFbTag(this)">💡 Suggestion</button>
+    <button class="fb-tag" onclick="setFbTag(this)">❌ Donnée incorrecte</button>
+    <button class="fb-tag" onclick="setFbTag(this)">🙋 Autre</button>
+  </div>
+  <textarea id="fbText" placeholder="Décrivez le problème ou votre suggestion…" style="width:100%;padding:0.75rem;border:1px solid var(--rule);background:var(--paper);font-family:'Instrument Sans',sans-serif;font-size:0.85rem;resize:vertical;min-height:80px;outline:none;color:var(--ink)"></textarea>
+  <input type="email" id="fbEmail" placeholder="Votre email (optionnel)" style="width:100%;padding:0.6rem 0.75rem;border:1px solid var(--rule);background:var(--paper);font-family:'Instrument Sans',sans-serif;font-size:0.82rem;margin-top:0.5rem;outline:none;color:var(--ink)">
+  <button onclick="submitFeedback(event)" style="margin-top:0.75rem;width:100%;padding:0.7rem;background:var(--ink);color:var(--paper);border:none;cursor:none;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.2s">Envoyer →</button>
+`;
+function setFbTag(el) {
+  document.querySelectorAll('.fb-tag').forEach(t => t.classList.remove('fb-sel'));
+  el.classList.add('fb-sel');
+}
+// Init panel HTML
+document.addEventListener('DOMContentLoaded', () => {
+  const panel = document.getElementById('feedbackPanel');
+  if (panel) panel.innerHTML = originalFeedbackHTML;
+});
+</script>
+
+<!-- ——— BANDEAU LÉGAL IA ——— -->
+<div id="aiBanner" style="position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--ink);color:rgba(245,240,232,0.75);padding:0.75rem 4rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;border-top:2px solid rgba(200,168,75,0.25);flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+    <span style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(200,168,75,0.3);padding:0.2rem 0.6rem;white-space:nowrap">IA — Contenu généré</span>
+    <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;line-height:1.5">Les rapports JobBrief sont générés par intelligence artificielle à partir de sources publiquement disponibles en ligne. Une supervision humaine est exercée sur les méthodes et le service. L'IA peut commettre des erreurs — nous travaillons à les minimiser. Les informations fournies ne constituent pas un conseil juridique, financier ou professionnel. <a href="#mentions" style="color:rgba(200,168,75,0.6);text-decoration:underline">Mentions légales</a></span>
+  </div>
+  <button onclick="document.getElementById('aiBanner').style.display='none'" style="background:none;border:none;cursor:none;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,240,232,0.3);white-space:nowrap;flex-shrink:0">Compris ✕</button>
+</div>
+
+<!-- ——— WIDGET FEEDBACK FLOTTANT ——— -->
+<style>
+.fb-tag { font-family:'DM Mono',monospace; font-size:0.56rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.7rem; border:1px solid var(--rule); background:var(--paper); color:var(--dim); cursor:none; transition:all 0.15s; }
+.fb-tag:hover, .fb-tag.fb-sel { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+#feedbackWidget { position:fixed; right:1.5rem; bottom:4.5rem; z-index:199; }
+#feedbackToggle { display:flex; align-items:center; gap:0.6rem; padding:0.7rem 1.2rem; background:var(--ink); color:var(--paper); border:none; cursor:none; font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; box-shadow:0 4px 16px rgba(10,10,10,0.2); transition:background 0.2s; }
+#feedbackToggle:hover { background:var(--gold); color:var(--ink); }
+#feedbackPanel { display:none; flex-direction:column; position:absolute; bottom:calc(100% + 0.75rem); right:0; width:320px; background:var(--cream); padding:1.25rem; border:1px solid var(--rule); box-shadow:0 8px 32px rgba(10,10,10,0.12); }
+@media (max-width:900px) { #feedbackWidget { right:1rem; bottom:5rem; } #feedbackPanel { width:calc(100vw - 2rem); right:auto; left:0; } #aiBanner { padding:0.75rem 1.5rem; } }
+</style>
+
+<div id="feedbackWidget">
+  <div id="feedbackPanel"></div>
+  <button id="feedbackToggle" onclick="toggleFeedback()">
+    <span>💬</span> Feedback · Signaler un problème
+  </button>
+</div>
+
+<!-- ——— MENTIONS LÉGALES ——— -->
+<section id="mentions" style="background:var(--cream);padding:4rem;border-top:1px solid var(--rule)">
+  <div style="max-width:680px;margin:0 auto">
+    <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:1.5rem">— Mentions légales & information IA —</div>
+
+    <div style="display:flex;flex-direction:column;gap:2rem">
+
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem">Contenu généré par intelligence artificielle</div>
+        <p style="font-size:0.82rem;line-height:1.7;color:var(--dim)">Les rapports produits par JobBrief sont générés automatiquement par un système d'intelligence artificielle (IA générative) à partir de sources d'information publiquement disponibles sur Internet (registres légaux, presse, publications officielles, réseaux professionnels publics). Une supervision humaine est exercée sur les méthodes de génération, les processus de vérification et le service dans son ensemble. Conformément à l'article 50 du Règlement (UE) 2024/1689 sur l'intelligence artificielle (AI Act), les utilisateurs sont informés qu'ils interagissent avec un contenu généré par un système d'IA.</p>
+      </div>
+
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem">Limites et responsabilité</div>
+        <p style="font-size:0.82rem;line-height:1.7;color:var(--dim)">Malgré les efforts déployés pour minimiser les erreurs, l'IA peut produire des informations inexactes, incomplètes ou périmées. Les informations contenues dans les rapports Briefd sont fournies à titre indicatif uniquement et ne constituent en aucun cas un conseil juridique, financier, professionnel ou de placement. JobBrief ne saurait être tenu responsable des décisions prises sur la base de ces informations. L'utilisateur est seul responsable de l'utilisation qu'il fait du contenu généré. En cas d'erreur identifiée, nous vous invitons à nous la signaler via le widget de feedback.</p>
+      </div>
+
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem">Sources et données</div>
+        <p style="font-size:0.82rem;line-height:1.7;color:var(--dim)">Toutes les informations utilisées pour générer les rapports sont issues de sources publiquement accessibles en ligne au moment de la génération. Les sources sont citées dans chaque rapport avec une indication de leur fraîcheur et de leur niveau de confiance. JobBrief ne collecte ni ne redistribue de données à caractère personnel sans base légale.</p>
+      </div>
+
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem">Données personnelles & RGPD</div>
+        <p style="font-size:0.82rem;line-height:1.7;color:var(--dim)">JobBrief est en phase de test (POC). Les données collectées (adresse email, documents uploadés) sont utilisées exclusivement pour la fourniture du service dans le cadre de ce test, et ne sont pas revendues à des tiers. Aucune donnée n'est conservée au-delà de la durée nécessaire à la génération du rapport. L'hébergement est réalisé au sein de l'Union Européenne. Pour toute question ou demande de suppression de vos données : contact@jobbrief.fr</p>
+      </div>
+
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem">Hébergement & statut</div>
+        <p style="font-size:0.82rem;line-height:1.7;color:var(--dim)">Le service JobBrief est hébergé sur des infrastructures localisées au sein de l'Union Européenne, conformes aux exigences du RGPD. JobBrief est actuellement en phase de test (POC — Proof of Concept). Aucune donnée personnelle n'est conservée au-delà du strict nécessaire à la fourniture du service. La structure juridique est en cours de constitution. Contact : contact@jobbrief.fr</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
