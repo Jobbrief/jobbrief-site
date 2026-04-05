@@ -449,11 +449,27 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
     <div class="flow-body" id="step1">
       <div class="step-title-sm">Quelle société analysons-nous ?</div>
       <div class="step-desc-sm">Entrez le nom <strong>exact et complet</strong> de la société. Si vous postulez dans une filiale d'un groupe, indiquez le nom de la filiale — pas celui du groupe. <em>Ex : "Renault Trucks" et non "Renault", "Deloitte Financial Advisory" et non "Deloitte".</em> Plus le nom est précis, plus le rapport sera pertinent.</div>
-      <div class="field-group">
-        <label class="field-label">Nom exact de la société *</label>
-        <input type="text" class="field-input" placeholder="ex : Renault Trucks, Deloitte Financial Advisory, Fondation de France…" id="companyInput">
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Prénom *</label>
+          <input type="text" class="field-input" placeholder="ex : Marie" id="prenomInput">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Nom <span style="opacity:0.5;font-size:0.85em">(optionnel)</span></label>
+          <input type="text" class="field-input" placeholder="ex : Dupont" id="nomInput">
+        </div>
       </div>
-      <div class="field-group" style="margin-top:-0.5rem">
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Nom exact de la société *</label>
+          <input type="text" class="field-input" placeholder="ex : Renault Trucks, Deloitte Financial Advisory…" id="companyInput">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Ville du poste *</label>
+          <input type="text" class="field-input" placeholder="ex : Paris, Lyon, Bordeaux…" id="villeInput">
+        </div>
+      </div>
+      <div class="field-group">
         <label class="field-label">Groupe d'appartenance <span style="opacity:0.5;font-size:0.85em">(optionnel — si filiale)</span></label>
         <input type="text" class="field-input" placeholder="ex : Groupe Renault, Deloitte International…" id="groupeInput">
       </div>
@@ -1061,12 +1077,47 @@ function selectFormule(el, formule) {
 
 function submitFormule() {
   if (!selectedFormule) { alert('Choisissez une formule pour continuer.'); return; }
-  const urls = {
+
+  // Récupérer toutes les données saisies dans le flow
+  const prenom = (document.getElementById('prenomInput')?.value || '').trim();
+  const nom = (document.getElementById('nomInput')?.value || '').trim();
+  const societe = (document.getElementById('companyInput')?.value || '').trim();
+  const ville = (document.getElementById('villeInput')?.value || '').trim();
+  const poste = (document.getElementById('posteInput')?.value || '').trim();
+  const typeEntretien = (document.getElementById('typeInput')?.value || '').trim();
+  const linkedin = (document.getElementById('linkedinInput')?.value || '').trim();
+  const offre = (document.getElementById('offerText')?.value || '').trim();
+
+  // Récupérer les sélections pills
+  const niveau = document.querySelector('.q-opt.sel[onclick*="niv"]')?.textContent?.trim() || '';
+  const secteur = document.querySelector('.q-opt.sel[onclick*="secteur"]')?.textContent?.trim() || '';
+  const typePoste = document.querySelector('.q-opt.sel[onclick*="typeposte"]')?.textContent?.trim() || '';
+  const worry = document.querySelector('.q-opt.sel[onclick*="worry"]')?.textContent?.trim() || '';
+
+  // Construire les paramètres URL pour pré-remplir Tally
+  const params = new URLSearchParams();
+  if (prenom) params.set('prenom', prenom);
+  if (nom) params.set('nom', nom);
+  if (societe) params.set('société', societe);
+  if (ville) params.set('ville', ville);
+  if (poste) params.set('poste', poste);
+  if (typeEntretien) params.set('type_entretien', typeEntretien);
+  if (niveau) params.set('niveau', niveau);
+  if (secteur) params.set('secteur', secteur);
+  if (typePoste) params.set('type_poste', typePoste);
+  if (worry) params.set('inquietude', worry);
+  if (linkedin) params.set('linkedin', linkedin);
+  if (offre) params.set('offre', offre.substring(0, 500)); // Tally limite les params URL
+
+  const bases = {
     gratuit: 'https://tally.so/r/XxYyGV',
     rapport: 'https://tally.so/r/GxDk8p',
     coaching: 'https://tally.so/r/q4WePk'
   };
-  window.open(urls[selectedFormule], '_blank');
+
+  const queryString = params.toString();
+  const url = queryString ? `${bases[selectedFormule]}?${queryString}` : bases[selectedFormule];
+  window.open(url, '_blank');
 }
 
 // ——— Q-OPT SELECTION ———
