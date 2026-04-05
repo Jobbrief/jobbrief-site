@@ -831,36 +831,38 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
 <!-- PRICING -->
 <section class="pricing-section" id="tarifs">
   <div class="section-tag">Tarifs</div>
-  <h2 class="section-title" style="color:var(--paper)">Simple.<br><em style="font-style:italic;color:var(--gold)">Deux options.</em></h2>
-  <p class="section-sub">L'aperçu gratuit pour voir si JobBrief est fait pour vous. Le rapport complet quand l'entretien est dans 48h.</p>
+  <h2 class="section-title" style="color:var(--paper)">Simple.<br><em style="font-style:italic;color:var(--gold)">Trois options.</em></h2>
+  <p class="section-sub">Commencez gratuitement. Montez en puissance selon votre entretien.</p>
 
-  <div class="pricing-grid reveal">
+  <div class="pricing-grid reveal" style="grid-template-columns:repeat(3,1fr);max-width:960px">
+
+    <!-- TIER 1 — Gratuit -->
     <div class="pricing-card">
       <div class="pricing-badge">Pour découvrir</div>
       <div class="pricing-name">Aperçu</div>
       <div><span class="pricing-amount">0€</span></div>
-      <div class="pricing-desc">L'executive summary, 3 signaux clés sourcés, le profil de votre interlocuteur. Sans carte bancaire.</div>
+      <div class="pricing-desc">L'essentiel pour évaluer JobBrief. Sans carte bancaire.</div>
       <div class="pricing-feats">
         <div class="pricing-feat">Executive summary sourcé</div>
         <div class="pricing-feat">3 signaux clés vérifiés</div>
         <div class="pricing-feat">Profil de votre interlocuteur</div>
         <div class="pricing-feat">Score de fraîcheur des données</div>
         <div class="pricing-feat" style="color:rgba(245,240,232,0.25)">Questions d'entretien — grisées</div>
-        <div class="pricing-feat" style="color:rgba(245,240,232,0.25)">Tests techniques — grisés</div>
+        <div class="pricing-feat" style="color:rgba(245,240,232,0.25)">Coaching — non inclus</div>
       </div>
       <a href="https://tally.so/r/GxDk8p" target="_blank" class="btn-price btn-price-outline" style="text-decoration:none;display:block;text-align:center">Essayer gratuitement</a>
     </div>
 
-    <div class="pricing-card">
+    <!-- TIER 2 — Rapport -->
+    <div class="pricing-card featured">
       <div class="pricing-badge">Rapport complet</div>
       <div class="pricing-name">JobBrief</div>
       <div><span class="pricing-amount">9€</span><span class="pricing-period">/ rapport</span></div>
-      <div class="pricing-desc">Le rapport complet — 12 sections, questions 3 blocs, test technique, fourchette salariale. Livré en 30 min.</div>
+      <div class="pricing-desc">Le rapport complet sur votre société cible. Livré en 30 min.</div>
       <div class="pricing-feats">
         <div class="pricing-feat">Tout l'aperçu gratuit</div>
         <div class="pricing-feat">7 signaux clés complets</div>
-        <div class="pricing-feat">Questions 3 blocs + réponses guidées</div>
-        <div class="pricing-feat">Test technique + correction</div>
+        <div class="pricing-feat">Questions 3 blocs calibrées</div>
         <div class="pricing-feat">Questions à poser à l'interlocuteur</div>
         <div class="pricing-feat">Fourchette salariale + négociation</div>
         <div class="pricing-feat">Lois sectorielles + ressources</div>
@@ -868,6 +870,25 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       </div>
       <button class="btn-price btn-price-gold" onclick="window.open('https://buy.stripe.com/aFacN53YHdVD9TJdjp4AU00','_blank')">Obtenir mon rapport — 9€</button>
     </div>
+
+    <!-- TIER 3 — Coaching -->
+    <div class="pricing-card">
+      <div class="pricing-badge">Préparation maximale</div>
+      <div class="pricing-name">Coaching IA</div>
+      <div><span class="pricing-amount">49€</span><span class="pricing-period">/ session</span></div>
+      <div class="pricing-desc">Le rapport complet + une simulation d'entretien par IA selon votre interlocuteur réel.</div>
+      <div class="pricing-feats">
+        <div class="pricing-feat">Tout le rapport JobBrief</div>
+        <div class="pricing-feat">Test technique + correction guidée</div>
+        <div class="pricing-feat">Réponses guidées aux questions clés</div>
+        <div class="pricing-feat">Simulation RH — questions culture fit</div>
+        <div class="pricing-feat">Simulation N+1 — questions techniques</div>
+        <div class="pricing-feat">Simulation CEO / Associé — vision stratégique</div>
+        <div class="pricing-feat">Feedback détaillé par rôle</div>
+      </div>
+      <a href="https://tally.so/r/GxDk8p" target="_blank" class="btn-price btn-price-outline" style="text-decoration:none;display:block;text-align:center;border-color:var(--gold);color:var(--gold)">Rejoindre la liste d'attente</a>
+    </div>
+
   </div>
 
   <p style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,240,232,0.2);text-align:center;margin-top:2rem">Paiement sécurisé · Stripe · Aucun abonnement · Accès immédiat · Données non revendues</p>
@@ -881,11 +902,8 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       Votre prochain entretien<br>
       mérite mieux qu'une <em>recherche Google.</em>
     </h2>
-    <p class="cta-sub">Entrez votre email. JobBrief vous envoie gratuitement l'executive summary et les 3 premiers signaux de votre société cible. Le rapport complet pour 9€.</p>
-    <form class="cta-form" onsubmit="window.open('https://tally.so/r/GxDk8p','_blank');return false;">
-      <input type="email" class="cta-input" placeholder="votre@email.com" required>
-      <button type="submit" class="cta-btn">Je veux mon rapport →</button>
-    </form>
+    <p class="cta-sub">JobBrief vous envoie gratuitement l'executive summary et les 3 premiers signaux de votre société cible. Le rapport complet pour 9€.</p>
+    <a href="https://tally.so/r/GxDk8p" target="_blank" class="cta-btn" style="display:inline-block;text-decoration:none;padding:1rem 2.5rem;background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.2s;">Je veux mon rapport →</a>
     <div class="cta-note">Aucune carte bancaire · 1 aperçu gratuit · Résultats en 30 minutes</div>
   </div>
 </section>
@@ -1016,10 +1034,10 @@ function handleCTA(e) {
 </script>
 
 <!-- ——— BANDEAU LÉGAL IA ——— -->
-<div id="aiBanner" style="position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--ink);color:rgba(245,240,232,0.75);padding:0.75rem 4rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;border-top:2px solid rgba(200,168,75,0.25);flex-wrap:wrap">
-  <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-    <span style="font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(200,168,75,0.3);padding:0.2rem 0.6rem;white-space:nowrap">IA — Contenu généré</span>
-    <span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;line-height:1.5">Les rapports JobBrief sont générés par intelligence artificielle à partir de sources publiquement disponibles en ligne. Une supervision humaine est exercée sur les méthodes et le service. L'IA peut commettre des erreurs — nous travaillons à les minimiser. Les informations fournies ne constituent pas un conseil juridique, financier ou professionnel. <a href="#mentions" style="color:rgba(200,168,75,0.6);text-decoration:underline">Mentions légales</a></span>
+<div id="aiBanner" style="position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,10,10,0.92);color:rgba(245,240,232,0.45);padding:0.4rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;border-top:1px solid rgba(200,168,75,0.1);flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+    <span style="font-family:'DM Mono',monospace;font-size:0.48rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(200,168,75,0.4);white-space:nowrap">IA générative</span>
+    <span style="font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.04em;line-height:1.4">Rapports générés par IA à partir de sources publiques. Supervision humaine exercée. Peut contenir des erreurs. <a href="#mentions" style="color:rgba(200,168,75,0.35);text-decoration:underline">Mentions légales</a></span>
   </div>
   <button onclick="document.getElementById('aiBanner').style.display='none'" style="background:none;border:none;cursor:none;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,240,232,0.3);white-space:nowrap;flex-shrink:0">Compris ✕</button>
 </div>
