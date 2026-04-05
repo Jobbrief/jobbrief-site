@@ -342,7 +342,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
     <a href="#inside">Le rapport</a>
     <a href="#tarifs">Tarifs</a>
   </nav>
-  <a href="https://tally.so/r/XxYyGV" target="_blank" class="btn-nav" style="text-decoration:none">Essai gratuit</a>
+  <button class="btn-nav" onclick="goToFlow()">Essai gratuit</button>
 </header>
 
 <!-- HERO -->
@@ -358,7 +358,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       JobBrief analyse n'importe quelle société en 30 minutes : santé financière réelle, dirigeants, signaux internes, culture, et les questions exactes qu'ils vont vous poser — calibrées sur votre profil et l'offre.
     </p>
     <div class="hero-actions">
-      <a href="https://tally.so/r/XxYyGV" target="_blank" class="btn-primary" style="text-decoration:none">Analyser ma société — gratuit</a>
+      <button class="btn-primary" onclick="goToFlow()">Analyser ma société — gratuit</button>
       <button class="btn-ghost" onclick="document.getElementById('preview-anchor').scrollIntoView({behavior:'smooth'})">Voir un exemple →</button>
     </div>
   </div>
@@ -448,10 +448,14 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
     <!-- Étape 1 — La société -->
     <div class="flow-body" id="step1">
       <div class="step-title-sm">Quelle société analysons-nous ?</div>
-      <div class="step-desc-sm">Entrez le nom exact. JobBrief identifie automatiquement la structure juridique, le secteur et les dernières données publiques.</div>
+      <div class="step-desc-sm">Entrez le nom <strong>exact et complet</strong> de la société. Si vous postulez dans une filiale d'un groupe, indiquez le nom de la filiale — pas celui du groupe. <em>Ex : "Renault Trucks" et non "Renault", "Deloitte Financial Advisory" et non "Deloitte".</em> Plus le nom est précis, plus le rapport sera pertinent.</div>
       <div class="field-group">
-        <label class="field-label">Nom de la société *</label>
-        <input type="text" class="field-input" placeholder="ex : Groupe industriel, cabinet de conseil, startup tech, fondation…" id="companyInput">
+        <label class="field-label">Nom exact de la société *</label>
+        <input type="text" class="field-input" placeholder="ex : Renault Trucks, Deloitte Financial Advisory, Fondation de France…" id="companyInput">
+      </div>
+      <div class="field-group" style="margin-top:-0.5rem">
+        <label class="field-label">Groupe d'appartenance <span style="opacity:0.5;font-size:0.85em">(optionnel — si filiale)</span></label>
+        <input type="text" class="field-input" placeholder="ex : Groupe Renault, Deloitte International…" id="groupeInput">
       </div>
       <div class="field-row">
         <div class="field-group">
@@ -692,7 +696,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
         </div>
         <div class="locked-overlay">
           <div class="locked-badge">🔒 Contenu complet — rapport payant</div>
-          <button class="locked-cta" onclick="window.open('https://tally.so/r/GxDk8p','_blank')">Débloquer pour 9€ →</button>
+          <button class="locked-cta" onclick="goToFlow()">Débloquer pour 9€ →</button>
         </div>
       </div>
 
@@ -704,7 +708,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
         </div>
         <div class="locked-overlay">
           <div class="locked-badge">🔒 Cas Excel complet + correction</div>
-          <button class="locked-cta" onclick="window.open('https://tally.so/r/GxDk8p','_blank')">Débloquer pour 9€ →</button>
+          <button class="locked-cta" onclick="goToFlow()">Débloquer pour 9€ →</button>
         </div>
       </div>
 
@@ -722,7 +726,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
         </div>
         <div class="locked-overlay">
           <div class="locked-badge">🔒 5 questions + stratégie de pose</div>
-          <button class="locked-cta" onclick="window.open('https://tally.so/r/GxDk8p','_blank')">Débloquer pour 9€ →</button>
+          <button class="locked-cta" onclick="goToFlow()">Débloquer pour 9€ →</button>
         </div>
       </div>
 
@@ -745,7 +749,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       </div>
       <div class="pw-right">
         <div class="pw-price">9€ <span>/ rapport</span></div>
-        <button class="btn-pay" onclick="window.open('https://tally.so/r/GxDk8p','_blank')">Obtenir le rapport complet →</button>
+        <button class="btn-pay" onclick="goToFlow()">Commencer mon rapport →</button>
         <div style="font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,240,232,0.25)">Paiement Stripe · Accès immédiat</div>
       </div>
     </div>
@@ -852,7 +856,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       <div class="demo-row"><div class="demo-icon">✅</div><div>Great Place To Work 7 ans consécutifs. Culture bienveillance = filtre de recrutement non négociable pour le dirigeant.</div></div>
       <div class="demo-row" style="filter:blur(3.5px);opacity:0.4;user-select:none"><div class="demo-icon">🔒</div><div>Filiale internationale — exposition devise étrangère, obligations locales, rapatriement dividendes à gérer.</div></div>
       <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(245,240,232,0.08);text-align:center">
-        <button class="btn-pay" style="font-size:0.65rem;padding:0.7rem 1.5rem" onclick="window.open('https://tally.so/r/GxDk8p','_blank')">Débloquer le rapport complet — 9€</button>
+        <button class="btn-pay" style="font-size:0.65rem;padding:0.7rem 1.5rem" onclick="goToFlow()">Commencer — Débloquer →</button>
       </div>
     </div>
   </div>
@@ -910,7 +914,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
         <div class="pricing-feat" style="color:rgba(245,240,232,0.25)">Questions d'entretien — grisées</div>
         <div class="pricing-feat" style="color:rgba(245,240,232,0.25)">Coaching — non inclus</div>
       </div>
-      <a href="https://tally.so/r/XxYyGV" target="_blank" class="btn-price btn-price-outline" style="text-decoration:none;display:block;text-align:center">Essayer gratuitement</a>
+      <button class="btn-price btn-price-outline" onclick="goToFlow()">Commencer gratuitement</button>
     </div>
 
     <!-- TIER 2 — Rapport -->
@@ -928,7 +932,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
         <div class="pricing-feat">Lois sectorielles + ressources</div>
         <div class="pricing-feat">Export PDF</div>
       </div>
-      <button class="btn-price btn-price-gold" onclick="window.open('https://tally.so/r/GxDk8p','_blank')">Obtenir mon rapport — 9€</button>
+      <button class="btn-price btn-price-gold" onclick="goToFlow()">Commencer — 9€</button>
     </div>
 
     <!-- TIER 3 — Coaching -->
@@ -946,7 +950,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
         <div class="pricing-feat">Simulation CEO / Associé — vision stratégique</div>
         <div class="pricing-feat">Feedback détaillé par rôle</div>
       </div>
-      <a href="https://tally.so/r/q4WePk" target="_blank" class="btn-price btn-price-outline" style="text-decoration:none;display:block;text-align:center;border-color:var(--gold);color:var(--gold)">Rejoindre la liste d'attente</a>
+      <button class="btn-price btn-price-outline" onclick="goToFlow()" style="border-color:var(--gold);color:var(--gold)">Commencer — 49€</button>
     </div>
 
   </div>
@@ -963,7 +967,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       mérite mieux qu'une <em>recherche Google.</em>
     </h2>
     <p class="cta-sub">JobBrief vous envoie gratuitement l'executive summary et les 3 premiers signaux de votre société cible. Le rapport complet pour 9€.</p>
-    <a href="https://tally.so/r/XxYyGV" target="_blank" class="cta-btn" style="display:inline-block;text-decoration:none;padding:1rem 2.5rem;background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.2s;">Je veux mon rapport →</a>
+    <button class="cta-btn" onclick="goToFlow()">Je veux mon rapport →</button>
     <div class="cta-note">Aucune carte bancaire · 1 aperçu gratuit · Résultats en 30 minutes</div>
   </div>
 </section>
@@ -1039,6 +1043,10 @@ function generatePreview() {
   }, 2000);
 }
 
+function goToFlow() {
+  document.getElementById('flow').scrollIntoView({behavior:'smooth'});
+  setTimeout(() => { const el = document.getElementById('companyInput'); if(el) el.focus(); }, 600);
+}
 // ——— FORMULE SELECTION ———
 let selectedFormule = null;
 function selectFormule(el, formule) {
