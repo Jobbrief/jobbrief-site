@@ -442,25 +442,33 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       <button class="flow-tab active" id="tab1" onclick="showStep(1)">01 — La société</button>
       <button class="flow-tab" id="tab2" onclick="showStep(2)">02 — Votre profil</button>
       <button class="flow-tab" id="tab3" onclick="showStep(3)">03 — Documents</button>
-      <button class="flow-tab locked-tab" id="tab4">04 — Rapport</button>
+      <button class="flow-tab locked-tab" id="tab4">04 — Formule</button>
     </div>
 
-    <!-- Étape 1 -->
+    <!-- Étape 1 — La société -->
     <div class="flow-body" id="step1">
       <div class="step-title-sm">Quelle société analysons-nous ?</div>
       <div class="step-desc-sm">Entrez le nom exact. JobBrief identifie automatiquement la structure juridique, le secteur et les dernières données publiques.</div>
       <div class="field-group">
         <label class="field-label">Nom de la société *</label>
-        <input type="text" class="field-input" placeholder="ex : un cabinet de conseil, une ETI industrielle, une fondation, un groupe familial…" id="companyInput">
+        <input type="text" class="field-input" placeholder="ex : Groupe industriel, cabinet de conseil, startup tech, fondation…" id="companyInput">
       </div>
       <div class="field-row">
         <div class="field-group">
           <label class="field-label">Poste visé *</label>
-          <input type="text" class="field-input" placeholder="ex : CFO, Analyste TS, DAF…">
+          <input type="text" class="field-input" placeholder="ex : CFO, Analyste, Chef de projet, Directeur Commercial…" id="posteInput">
         </div>
         <div class="field-group">
           <label class="field-label">Type d'entretien</label>
-          <input type="text" class="field-input" placeholder="ex : 1er entretien, RH, Associé…">
+          <select class="field-input" id="typeInput">
+            <option value="">Sélectionner…</option>
+            <option>1er entretien RH</option>
+            <option>Entretien technique</option>
+            <option>Entretien N+1 / Manager</option>
+            <option>Entretien Associé / Dirigeant</option>
+            <option>Entretien final</option>
+            <option>Je ne sais pas encore</option>
+          </select>
         </div>
       </div>
       <div class="step-cta">
@@ -469,11 +477,12 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       </div>
     </div>
 
-    <!-- Étape 2 -->
+    <!-- Étape 2 — Profil -->
     <div class="flow-body" id="step2" style="display:none">
-      <div class="step-title-sm">Votre profil — pour calibrer les questions.</div>
-      <div class="step-desc-sm">JobBrief adapte les 3 blocs de questions (technique, interpersonnel, vision 360) à qui vous êtes — pas un rapport générique.</div>
+      <div class="step-title-sm">Votre profil — pour calibrer le rapport.</div>
+      <div class="step-desc-sm">JobBrief adapte chaque section à qui vous êtes — pas un rapport générique.</div>
       <div class="profile-q">
+
         <div>
           <span class="q-label">Votre niveau d'expérience</span>
           <div class="q-options">
@@ -481,31 +490,47 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
             <button class="q-opt" onclick="sel(this,'niv')">0–3 ans</button>
             <button class="q-opt" onclick="sel(this,'niv')">3–8 ans</button>
             <button class="q-opt" onclick="sel(this,'niv')">8–15 ans</button>
-            <button class="q-opt" onclick="sel(this,'niv')">15 ans+</button>
+            <button class="q-opt" onclick="sel(this,'niv')">15 ans+ / Direction</button>
           </div>
         </div>
+
         <div>
-          <span class="q-label">Votre domaine</span>
+          <span class="q-label">Secteur d'activité de la société</span>
           <div class="q-options">
-            <button class="q-opt" onclick="sel(this,'dom')">Finance / Audit</button>
-            <button class="q-opt" onclick="sel(this,'dom')">Transaction Services</button>
-            <button class="q-opt" onclick="sel(this,'dom')">M&A / PE / VC</button>
-            <button class="q-opt" onclick="sel(this,'dom')">Droit des affaires</button>
-            <button class="q-opt" onclick="sel(this,'dom')">Direction générale</button>
-            <button class="q-opt" onclick="sel(this,'dom')">RH / Conseil</button>
-            <button class="q-opt" onclick="sel(this,'dom')">Autre</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Finance & Banque</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Industrie & Manufacture</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Tech & Digital</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Conseil & Services</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Droit & Juridique</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Santé & Pharma</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Retail & Distribution</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Public & Associatif</button>
+            <button class="q-opt" onclick="sel(this,'secteur')">Autre</button>
           </div>
         </div>
+
         <div>
-          <span class="q-label">Ce qui vous inquiète le plus dans cet entretien</span>
+          <span class="q-label">Type de poste visé</span>
+          <div class="q-options">
+            <button class="q-opt" onclick="sel(this,'typeposte')">Direction (C-suite / DAF / DG…)</button>
+            <button class="q-opt" onclick="sel(this,'typeposte')">Management (Chef de projet / Manager…)</button>
+            <button class="q-opt" onclick="sel(this,'typeposte')">Expert / Confirmé</button>
+            <button class="q-opt" onclick="sel(this,'typeposte')">Junior (0–3 ans)</button>
+            <button class="q-opt" onclick="sel(this,'typeposte')">Stage / Alternance</button>
+          </div>
+        </div>
+
+        <div>
+          <span class="q-label">Ce qui vous inquiète le plus</span>
           <div class="q-options">
             <button class="q-opt" onclick="sel(this,'worry')">Les questions techniques</button>
-            <button class="q-opt" onclick="sel(this,'worry')">Les questions "qui êtes-vous"</button>
-            <button class="q-opt" onclick="sel(this,'worry')">Ne pas connaître la société</button>
-            <button class="q-opt" onclick="sel(this,'worry')">Négocier le package</button>
+            <button class="q-opt" onclick="sel(this,'worry')">Me présenter / "Parlez-moi de vous"</button>
+            <button class="q-opt" onclick="sel(this,'worry')">Ne pas connaître assez la société</button>
+            <button class="q-opt" onclick="sel(this,'worry')">Négocier le salaire</button>
             <button class="q-opt" onclick="sel(this,'worry')">Me démarquer des autres candidats</button>
           </div>
         </div>
+
       </div>
       <div class="step-cta">
         <button class="btn-step btn-step-ghost" onclick="showStep(1)">← Retour</button>
@@ -513,51 +538,86 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       </div>
     </div>
 
-    <!-- Étape 3 -->
+    <!-- Étape 3 — Documents -->
     <div class="flow-body" id="step3" style="display:none">
-      <div class="step-title-sm">Uploadez l'offre et votre CV.</div>
-      <div class="step-desc-sm">JobBrief croise les deux pour cibler exactement ce qu'ils vont vous demander — et trouver les points de friction ou de cohérence entre votre parcours et leurs attentes.</div>
+      <div class="step-title-sm">Votre CV et l'offre d'emploi.</div>
+      <div class="step-desc-sm">JobBrief croise les deux pour cibler exactement ce qu'ils vont vous demander et identifier les points de cohérence avec votre parcours.</div>
+
       <div class="upload-grid">
-        <div>
-          <div class="field-label" style="margin-bottom:0.5rem">Offre d'emploi *</div>
-          <div class="upload-zone" onclick="triggerUpload('offerFile')">
-            <div class="upload-icon">📄</div>
-            <div class="upload-label">Glissez ou cliquez</div>
-            <div class="upload-hint">PDF · Word · ou collez le texte ci-dessous</div>
-          </div>
-          <input type="file" id="offerFile" style="display:none" accept=".pdf,.doc,.docx">
-          <textarea class="field-input" placeholder="Ou collez le texte de l'offre ici…" style="margin-top:0.5rem"></textarea>
-        </div>
         <div>
           <div class="field-label" style="margin-bottom:0.5rem">Votre CV</div>
           <div class="upload-zone" onclick="triggerUpload('cvFile')">
             <div class="upload-icon">👤</div>
             <div class="upload-label">Glissez ou cliquez</div>
-            <div class="upload-hint">PDF · Word · ou collez votre URL LinkedIn</div>
+            <div class="upload-hint">PDF ou Word acceptés</div>
           </div>
           <input type="file" id="cvFile" style="display:none" accept=".pdf,.doc,.docx">
-          <input type="text" class="field-input" placeholder="Ou votre URL LinkedIn…" style="margin-top:0.5rem">
+          <div class="field-label" style="margin:0.75rem 0 0.3rem">Ou votre URL LinkedIn</div>
+          <input type="text" class="field-input" id="linkedinInput" placeholder="https://linkedin.com/in/votre-profil">
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:0.5rem">Offre d'emploi <span style="font-size:0.7em;opacity:0.5">(optionnel)</span></div>
+          <div class="upload-zone" onclick="triggerUpload('offerFile')">
+            <div class="upload-icon">📄</div>
+            <div class="upload-label">Glissez ou cliquez</div>
+            <div class="upload-hint">PDF ou Word acceptés</div>
+          </div>
+          <input type="file" id="offerFile" style="display:none" accept=".pdf,.doc,.docx">
+          <div class="field-label" style="margin:0.75rem 0 0.3rem">Ou collez le texte de l'offre</div>
+          <textarea class="field-input" id="offerText" placeholder="Collez ici le texte de l'offre d'emploi…" style="min-height:80px"></textarea>
         </div>
       </div>
+
       <div style="margin-bottom:1.25rem">
-        <label class="field-label">Informations complémentaires (optionnel)</label>
-        <textarea class="field-input" placeholder="Contexte particulier : vous connaissez quelqu'un dans cette société, vous avez déjà passé un 1er entretien, vous postulez en interne…" style="min-height:70px"></textarea>
+        <label class="field-label">Contexte particulier (optionnel)</label>
+        <textarea class="field-input" placeholder="Ex : entretien interne, vous connaissez quelqu'un dans la société, vous avez déjà passé un 1er entretien…" style="min-height:60px"></textarea>
       </div>
+
       <div class="step-cta">
         <button class="btn-step btn-step-ghost" onclick="showStep(2)">← Retour</button>
-        <button class="btn-step btn-step-primary" onclick="window.open('https://tally.so/r/XxYyGV','_blank')">Recevoir mon aperçu gratuit →</button>
-        <div class="step-note">Résultats en 30 min · 1 rapport gratuit</div>
+        <button class="btn-step btn-step-primary" onclick="showStep(4)">Choisir ma formule →</button>
       </div>
     </div>
 
-    <!-- Étape 4 placeholder -->
+    <!-- Étape 4 — Choix de formule -->
     <div class="flow-body" id="step4" style="display:none">
-      <div style="text-align:center;padding:2rem 0">
-        <div style="font-size:2.5rem;margin-bottom:1rem">⏳</div>
-        <div class="step-title-sm" style="text-align:center">Analyse en cours…</div>
-        <div class="step-desc-sm" style="text-align:center;margin:0 auto">JobBrief croise 40+ sources sur votre société cible. Résultats dans quelques minutes.</div>
+      <div class="step-title-sm">Quelle formule vous convient ?</div>
+      <div class="step-desc-sm">Choisissez selon votre entretien et le niveau de préparation souhaité.</div>
+
+      <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
+
+        <div class="formule-card" onclick="selectFormule(this,'gratuit')" style="border:1px solid var(--rule);padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center;gap:1rem">
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.2rem">Aperçu gratuit</div>
+            <div style="font-size:0.8rem;color:var(--dim)">Executive summary · 3 signaux · Profil interlocuteur</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold);white-space:nowrap">0€</div>
+        </div>
+
+        <div class="formule-card" onclick="selectFormule(this,'rapport')" style="border:1px solid var(--rule);padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center;gap:1rem;background:rgba(200,168,75,0.04);border-color:var(--gold)">
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.2rem">Rapport complet</div>
+            <div style="font-size:0.8rem;color:var(--dim)">12 sections · Questions calibrées · Fourchette salariale · PDF</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold);white-space:nowrap">9€</div>
+        </div>
+
+        <div class="formule-card" onclick="selectFormule(this,'coaching')" style="border:1px solid var(--rule);padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center;gap:1rem">
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.2rem">Coaching IA</div>
+            <div style="font-size:0.8rem;color:var(--dim)">Rapport + test technique + simulation RH / N+1 / CEO</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold);white-space:nowrap">49€</div>
+        </div>
+
+      </div>
+
+      <div class="step-cta">
+        <button class="btn-step btn-step-ghost" onclick="showStep(3)">← Retour</button>
+        <button class="btn-step btn-step-primary" id="btnFormule" onclick="submitFormule()">Commencer →</button>
       </div>
     </div>
+
   </div>
 </section>
 
@@ -977,6 +1037,28 @@ function generatePreview() {
     tab4.classList.remove('active');
     tab4.classList.add('done');
   }, 2000);
+}
+
+// ——— FORMULE SELECTION ———
+let selectedFormule = null;
+function selectFormule(el, formule) {
+  document.querySelectorAll('.formule-card').forEach(c => {
+    c.style.background = '';
+    c.style.borderColor = 'var(--rule)';
+  });
+  el.style.background = 'rgba(200,168,75,0.08)';
+  el.style.borderColor = 'var(--gold)';
+  selectedFormule = formule;
+}
+
+function submitFormule() {
+  if (!selectedFormule) { alert('Choisissez une formule pour continuer.'); return; }
+  const urls = {
+    gratuit: 'https://tally.so/r/XxYyGV',
+    rapport: 'https://tally.so/r/GxDk8p',
+    coaching: 'https://tally.so/r/q4WePk'
+  };
+  window.open(urls[selectedFormule], '_blank');
 }
 
 // ——— Q-OPT SELECTION ———
