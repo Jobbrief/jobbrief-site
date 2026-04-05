@@ -560,37 +560,26 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
 
     <!-- Étape 3 — Documents -->
     <div class="flow-body" id="step3" style="display:none">
-      <div class="step-title-sm">Votre CV et l'offre d'emploi.</div>
-      <div class="step-desc-sm">JobBrief croise les deux pour cibler exactement ce qu'ils vont vous demander et identifier les points de cohérence avec votre parcours.</div>
+      <div class="step-title-sm">Votre profil LinkedIn et l'offre d'emploi.</div>
+      <div class="step-desc-sm">JobBrief croise votre parcours et l'offre pour cibler exactement ce qu'ils vont vous demander. Vous pourrez joindre vos fichiers CV et offre à l'étape suivante directement dans le formulaire.</div>
 
-      <div class="upload-grid">
-        <div>
-          <div class="field-label" style="margin-bottom:0.5rem">Votre CV</div>
-          <div class="upload-zone" onclick="triggerUpload('cvFile')">
-            <div class="upload-icon">👤</div>
-            <div class="upload-label">Glissez ou cliquez</div>
-            <div class="upload-hint">PDF ou Word acceptés</div>
-          </div>
-          <input type="file" id="cvFile" style="display:none" accept=".pdf,.doc,.docx">
-          <div class="field-label" style="margin:0.75rem 0 0.3rem">Ou votre URL LinkedIn</div>
-          <input type="text" class="field-input" id="linkedinInput" placeholder="https://linkedin.com/in/votre-profil">
-        </div>
-        <div>
-          <div class="field-label" style="margin-bottom:0.5rem">Offre d'emploi <span style="font-size:0.7em;opacity:0.5">(optionnel)</span></div>
-          <div class="upload-zone" onclick="triggerUpload('offerFile')">
-            <div class="upload-icon">📄</div>
-            <div class="upload-label">Glissez ou cliquez</div>
-            <div class="upload-hint">PDF ou Word acceptés</div>
-          </div>
-          <input type="file" id="offerFile" style="display:none" accept=".pdf,.doc,.docx">
-          <div class="field-label" style="margin:0.75rem 0 0.3rem">Ou collez le texte de l'offre</div>
-          <textarea class="field-input" id="offerText" placeholder="Collez ici le texte de l'offre d'emploi…" style="min-height:80px"></textarea>
-        </div>
+      <div class="field-group">
+        <label class="field-label">Votre URL LinkedIn</label>
+        <input type="text" class="field-input" id="linkedinInput" placeholder="https://linkedin.com/in/votre-profil">
       </div>
 
-      <div style="margin-bottom:1.25rem">
-        <label class="field-label">Contexte particulier (optionnel)</label>
+      <div class="field-group">
+        <label class="field-label">Texte de l'offre d'emploi <span style="opacity:0.5;font-size:0.85em">(optionnel)</span></label>
+        <textarea class="field-input" id="offerText" placeholder="Collez ici le texte de l'offre si vous l'avez — sinon laissez vide." style="min-height:100px"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Contexte particulier <span style="opacity:0.5;font-size:0.85em">(optionnel)</span></label>
         <textarea class="field-input" placeholder="Ex : entretien interne, vous connaissez quelqu'un dans la société, vous avez déjà passé un 1er entretien…" style="min-height:60px"></textarea>
+      </div>
+
+      <div style="background:rgba(200,168,75,0.06);border:1px solid rgba(200,168,75,0.2);padding:0.9rem 1.1rem;margin-bottom:1.25rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;color:rgba(10,10,10,0.55)">
+        📎 Vous pourrez joindre votre CV (PDF ou Word) et l'offre d'emploi directement dans le formulaire à l'étape suivante.
       </div>
 
       <div class="step-cta">
