@@ -441,159 +441,137 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
     <div class="flow-tabs">
       <button class="flow-tab active" id="tab1" onclick="showStep(1)">01 — La société</button>
       <button class="flow-tab" id="tab2" onclick="showStep(2)">02 — Votre profil</button>
-      <button class="flow-tab locked-tab" id="tab3">03 — Formule</button>
+      <button class="flow-tab" id="tab3" onclick="showStep(3)">03 — Documents</button>
     </div>
 
-    <!-- Étape 1 — La société -->
+    <!-- Étape 1 — Démo La société -->
     <div class="flow-body" id="step1">
       <div class="step-title-sm">Quelle société analysons-nous ?</div>
-      <div class="step-desc-sm">Entrez le nom <strong>exact et complet</strong> de la société. Si vous postulez dans une filiale d'un groupe, indiquez le nom de la filiale — pas celui du groupe. <em>Ex : "Renault Trucks" et non "Renault", "Deloitte Financial Advisory" et non "Deloitte".</em> Plus le nom est précis, plus le rapport sera pertinent.</div>
-      <div class="field-row">
+      <div class="step-desc-sm">Entrez le nom exact de la société, la ville et le poste visé. JobBrief identifie automatiquement la structure juridique, le secteur et les dernières données publiques.</div>
+      <div class="field-row" style="opacity:0.5;pointer-events:none">
         <div class="field-group">
           <label class="field-label">Prénom *</label>
-          <input type="text" class="field-input" placeholder="ex : Marie" id="prenomInput">
+          <input type="text" class="field-input" value="Marie" readonly>
         </div>
         <div class="field-group">
-          <label class="field-label">Nom <span style="opacity:0.5;font-size:0.85em">(optionnel)</span></label>
-          <input type="text" class="field-input" placeholder="ex : Dupont" id="nomInput">
+          <label class="field-label">Nom</label>
+          <input type="text" class="field-input" value="Dupont" readonly>
         </div>
       </div>
-      <div class="field-row">
+      <div class="field-row" style="opacity:0.5;pointer-events:none">
         <div class="field-group">
-          <label class="field-label">Nom exact de la société *</label>
-          <input type="text" class="field-input" placeholder="ex : Renault Trucks, Deloitte Financial Advisory…" id="companyInput">
+          <label class="field-label">Société cible *</label>
+          <input type="text" class="field-input" value="Valence Advisory" readonly>
         </div>
         <div class="field-group">
-          <label class="field-label">Ville du poste *</label>
-          <input type="text" class="field-input" placeholder="ex : Paris, Lyon, Bordeaux…" id="villeInput">
+          <label class="field-label">Ville *</label>
+          <input type="text" class="field-input" value="Paris" readonly>
         </div>
       </div>
-      <div class="field-group">
-        <label class="field-label">Groupe d'appartenance <span style="opacity:0.5;font-size:0.85em">(optionnel — si filiale)</span></label>
-        <input type="text" class="field-input" placeholder="ex : Groupe Renault, Deloitte International…" id="groupeInput">
-      </div>
-      <div class="field-row">
+      <div class="field-row" style="opacity:0.5;pointer-events:none">
         <div class="field-group">
           <label class="field-label">Poste visé *</label>
-          <input type="text" class="field-input" placeholder="ex : CFO, Analyste, Chef de projet, Directeur Commercial…" id="posteInput">
+          <input type="text" class="field-input" value="Analyste Transaction Services" readonly>
         </div>
         <div class="field-group">
           <label class="field-label">Type d'entretien</label>
-          <select class="field-input" id="typeInput">
-            <option value="">Sélectionner…</option>
-            <option>1er entretien RH</option>
-            <option>Entretien technique</option>
-            <option>Entretien N+1 / Manager</option>
-            <option>Entretien Associé / Dirigeant</option>
-            <option>Entretien final</option>
-            <option>Je ne sais pas encore</option>
-          </select>
+          <input type="text" class="field-input" value="1er entretien RH" readonly>
         </div>
       </div>
       <div class="step-cta">
-        <button class="btn-step btn-step-primary" onclick="showStep(2)">Continuer →</button>
-        <div class="step-note">Gratuit · Sans carte bancaire</div>
+        <button class="btn-step btn-step-primary" onclick="showStep(2)">Voir l'étape suivante →</button>
+        <div class="step-note">Exemple — les vrais champs sont dans le formulaire</div>
       </div>
     </div>
 
-    <!-- Étape 2 — Profil -->
+    <!-- Étape 2 — Démo Profil -->
     <div class="flow-body" id="step2" style="display:none">
       <div class="step-title-sm">Votre profil — pour calibrer le rapport.</div>
       <div class="step-desc-sm">JobBrief adapte chaque section à qui vous êtes — pas un rapport générique.</div>
-      <div class="profile-q">
-
+      <div class="profile-q" style="opacity:0.5;pointer-events:none">
         <div>
           <span class="q-label">Votre niveau d'expérience</span>
           <div class="q-options">
-            <button class="q-opt" onclick="sel(this,'niv')">Stage / Alternance</button>
-            <button class="q-opt" onclick="sel(this,'niv')">0–3 ans</button>
-            <button class="q-opt" onclick="sel(this,'niv')">3–8 ans</button>
-            <button class="q-opt" onclick="sel(this,'niv')">8–15 ans</button>
-            <button class="q-opt" onclick="sel(this,'niv')">15 ans+ / Direction</button>
+            <button class="q-opt sel">Stage / Alternance</button>
+            <button class="q-opt">0–3 ans</button>
+            <button class="q-opt">3–8 ans</button>
+            <button class="q-opt">8–15 ans</button>
+            <button class="q-opt">15 ans+ / Direction</button>
           </div>
         </div>
-
         <div>
-          <span class="q-label">Secteur d'activité de la société</span>
+          <span class="q-label">Secteur d'activité</span>
           <div class="q-options">
-            <button class="q-opt" onclick="sel(this,'secteur')">Finance & Banque</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Industrie & Manufacture</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Tech & Digital</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Conseil & Services</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Droit & Juridique</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Santé & Pharma</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Retail & Distribution</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Public & Associatif</button>
-            <button class="q-opt" onclick="sel(this,'secteur')">Autre</button>
+            <button class="q-opt sel">Finance & Banque</button>
+            <button class="q-opt">Industrie & Manufacture</button>
+            <button class="q-opt">Tech & Digital</button>
+            <button class="q-opt">Conseil & Services</button>
+            <button class="q-opt">Droit & Juridique</button>
+            <button class="q-opt">Santé & Pharma</button>
+            <button class="q-opt">Retail & Distribution</button>
+            <button class="q-opt">Autre</button>
           </div>
         </div>
-
         <div>
-          <span class="q-label">Type de poste visé</span>
+          <span class="q-label">Type de poste</span>
           <div class="q-options">
-            <button class="q-opt" onclick="sel(this,'typeposte')">Direction (C-suite / DAF / DG…)</button>
-            <button class="q-opt" onclick="sel(this,'typeposte')">Management (Chef de projet / Manager…)</button>
-            <button class="q-opt" onclick="sel(this,'typeposte')">Expert / Confirmé</button>
-            <button class="q-opt" onclick="sel(this,'typeposte')">Junior (0–3 ans)</button>
-            <button class="q-opt" onclick="sel(this,'typeposte')">Stage / Alternance</button>
+            <button class="q-opt">Direction</button>
+            <button class="q-opt">Management</button>
+            <button class="q-opt">Expert / Confirmé</button>
+            <button class="q-opt">Junior (0–3 ans)</button>
+            <button class="q-opt sel">Stage / Alternance</button>
           </div>
         </div>
-
         <div>
           <span class="q-label">Ce qui vous inquiète le plus</span>
           <div class="q-options">
-            <button class="q-opt" onclick="sel(this,'worry')">Les questions techniques</button>
-            <button class="q-opt" onclick="sel(this,'worry')">Me présenter / "Parlez-moi de vous"</button>
-            <button class="q-opt" onclick="sel(this,'worry')">Ne pas connaître assez la société</button>
-            <button class="q-opt" onclick="sel(this,'worry')">Négocier le salaire</button>
-            <button class="q-opt" onclick="sel(this,'worry')">Me démarquer des autres candidats</button>
+            <button class="q-opt">Les questions techniques</button>
+            <button class="q-opt sel">Ne pas connaître assez la société</button>
+            <button class="q-opt">Me présenter</button>
+            <button class="q-opt">Négocier le salaire</button>
+            <button class="q-opt">Me démarquer</button>
           </div>
         </div>
-
       </div>
       <div class="step-cta">
         <button class="btn-step btn-step-ghost" onclick="showStep(1)">← Retour</button>
-        <button class="btn-step btn-step-primary" onclick="showStep(3)">Continuer →</button>
+        <button class="btn-step btn-step-primary" onclick="showStep(3)">Voir l'étape suivante →</button>
       </div>
     </div>
 
-    <!-- Étape 3 — Choix de formule → Tally -->
+    <!-- Étape 3 — CTA vers Tally -->
     <div class="flow-body" id="step3" style="display:none">
-      <div class="step-title-sm">Choisissez votre formule.</div>
-      <div class="step-desc-sm">Vous serez redirigé vers notre formulaire pour finaliser votre demande — vous pourrez y joindre votre CV et l'offre d'emploi.</div>
+      <div class="step-title-sm">Prêt à générer votre rapport ?</div>
+      <div class="step-desc-sm">Choisissez votre formule dans le formulaire — vous pourrez y joindre votre CV et l'offre d'emploi directement.</div>
 
-      <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
-
-        <div class="formule-card" onclick="selectFormule(this,'gratuit')" style="border:1px solid var(--rule);padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center;gap:1rem">
+      <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem;opacity:0.6;pointer-events:none">
+        <div style="border:1px solid var(--rule);padding:1.25rem;display:flex;justify-content:space-between;align-items:center">
           <div>
             <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.2rem">Aperçu gratuit</div>
             <div style="font-size:0.8rem;color:var(--dim)">Executive summary · 3 signaux · Profil interlocuteur</div>
           </div>
-          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold);white-space:nowrap">0€</div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold)">0€</div>
         </div>
-
-        <div class="formule-card" onclick="selectFormule(this,'rapport')" style="border:1px solid var(--rule);padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center;gap:1rem;background:rgba(200,168,75,0.04);border-color:var(--gold)">
+        <div style="border:1px solid var(--gold);padding:1.25rem;display:flex;justify-content:space-between;align-items:center;background:rgba(200,168,75,0.04)">
           <div>
             <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.2rem">Rapport complet</div>
             <div style="font-size:0.8rem;color:var(--dim)">12 sections · Questions calibrées · Fourchette salariale · PDF</div>
           </div>
-          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold);white-space:nowrap">9€</div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold)">9€</div>
         </div>
-
-        <div class="formule-card" onclick="selectFormule(this,'coaching')" style="border:1px solid var(--rule);padding:1.25rem;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center;gap:1rem">
+        <div style="border:1px solid var(--rule);padding:1.25rem;display:flex;justify-content:space-between;align-items:center">
           <div>
             <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.2rem">Coaching IA</div>
             <div style="font-size:0.8rem;color:var(--dim)">Rapport + test technique + simulation RH / N+1 / CEO</div>
           </div>
-          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold);white-space:nowrap">49€</div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold)">49€</div>
         </div>
-
       </div>
 
       <div class="step-cta">
         <button class="btn-step btn-step-ghost" onclick="showStep(2)">← Retour</button>
-        <button class="btn-step btn-step-primary" id="btnFormule" onclick="submitFormule()">Accéder au formulaire →</button>
-        <div class="step-note">Vous pourrez joindre CV et offre dans le formulaire</div>
+        <button class="btn-step btn-step-primary" onclick="goToFlow()">Accéder au formulaire →</button>
+        <div class="step-note">Vous choisirez votre formule dans le formulaire</div>
       </div>
     </div>
 
@@ -1005,8 +983,7 @@ function showStep(n) {
 }
 
 function goToFlow() {
-  document.getElementById('flow').scrollIntoView({behavior:'smooth'});
-  setTimeout(() => { const el = document.getElementById('companyInput'); if(el) el.focus(); }, 600);
+  window.open('https://tally.so/r/XxYyGV', '_blank');
 }
 // ——— FORMULE SELECTION ———
 let selectedFormule = null;
