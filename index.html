@@ -433,7 +433,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
 <section class="flow-section" id="flow">
   <div class="flow-header">
     <div class="section-tag">Comment ça marche</div>
-    <h2 class="section-title">4 étapes.<br>Un rapport sur mesure.</h2>
+    <h2 class="section-title">3 étapes.<br>Un rapport sur mesure.</h2>
     <p class="section-sub">JobBrief croise votre profil et l'offre pour calibrer exactement les questions qu'ils vont vous poser — technique, interpersonnel, vision stratégique.</p>
   </div>
 
@@ -441,8 +441,7 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
     <div class="flow-tabs">
       <button class="flow-tab active" id="tab1" onclick="showStep(1)">01 — La société</button>
       <button class="flow-tab" id="tab2" onclick="showStep(2)">02 — Votre profil</button>
-      <button class="flow-tab" id="tab3" onclick="showStep(3)">03 — Documents</button>
-      <button class="flow-tab locked-tab" id="tab4">04 — Formule</button>
+      <button class="flow-tab locked-tab" id="tab3">03 — Formule</button>
     </div>
 
     <!-- Étape 1 — La société -->
@@ -558,40 +557,10 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       </div>
     </div>
 
-    <!-- Étape 3 — Documents -->
+    <!-- Étape 3 — Choix de formule → Tally -->
     <div class="flow-body" id="step3" style="display:none">
-      <div class="step-title-sm">Votre profil LinkedIn et l'offre d'emploi.</div>
-      <div class="step-desc-sm">JobBrief croise votre parcours et l'offre pour cibler exactement ce qu'ils vont vous demander. Vous pourrez joindre vos fichiers CV et offre à l'étape suivante directement dans le formulaire.</div>
-
-      <div class="field-group">
-        <label class="field-label">Votre URL LinkedIn</label>
-        <input type="text" class="field-input" id="linkedinInput" placeholder="https://linkedin.com/in/votre-profil">
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Texte de l'offre d'emploi <span style="opacity:0.5;font-size:0.85em">(optionnel)</span></label>
-        <textarea class="field-input" id="offerText" placeholder="Collez ici le texte de l'offre si vous l'avez — sinon laissez vide." style="min-height:100px"></textarea>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Contexte particulier <span style="opacity:0.5;font-size:0.85em">(optionnel)</span></label>
-        <textarea class="field-input" placeholder="Ex : entretien interne, vous connaissez quelqu'un dans la société, vous avez déjà passé un 1er entretien…" style="min-height:60px"></textarea>
-      </div>
-
-      <div style="background:rgba(200,168,75,0.06);border:1px solid rgba(200,168,75,0.2);padding:0.9rem 1.1rem;margin-bottom:1.25rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;color:rgba(10,10,10,0.55)">
-        📎 Vous pourrez joindre votre CV (PDF ou Word) et l'offre d'emploi directement dans le formulaire à l'étape suivante.
-      </div>
-
-      <div class="step-cta">
-        <button class="btn-step btn-step-ghost" onclick="showStep(2)">← Retour</button>
-        <button class="btn-step btn-step-primary" onclick="showStep(4)">Choisir ma formule →</button>
-      </div>
-    </div>
-
-    <!-- Étape 4 — Choix de formule -->
-    <div class="flow-body" id="step4" style="display:none">
-      <div class="step-title-sm">Quelle formule vous convient ?</div>
-      <div class="step-desc-sm">Choisissez selon votre entretien et le niveau de préparation souhaité.</div>
+      <div class="step-title-sm">Choisissez votre formule.</div>
+      <div class="step-desc-sm">Vous serez redirigé vers notre formulaire pour finaliser votre demande — vous pourrez y joindre votre CV et l'offre d'emploi.</div>
 
       <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
 
@@ -622,8 +591,9 @@ footer { background: var(--ink); padding: 2.5rem 4rem; display: flex; justify-co
       </div>
 
       <div class="step-cta">
-        <button class="btn-step btn-step-ghost" onclick="showStep(3)">← Retour</button>
-        <button class="btn-step btn-step-primary" id="btnFormule" onclick="submitFormule()">Commencer →</button>
+        <button class="btn-step btn-step-ghost" onclick="showStep(2)">← Retour</button>
+        <button class="btn-step btn-step-primary" id="btnFormule" onclick="submitFormule()">Accéder au formulaire →</button>
+        <div class="step-note">Vous pourrez joindre CV et offre dans le formulaire</div>
       </div>
     </div>
 
@@ -1021,32 +991,17 @@ window.addEventListener('scroll', () => { header.style.boxShadow = window.scroll
 
 // ——— FLOW STEPS ———
 function showStep(n) {
-  [1,2,3,4].forEach(i => {
+  [1,2,3].forEach(i => {
     const body = document.getElementById('step'+i);
     const tab = document.getElementById('tab'+i);
     if (body) body.style.display = i === n ? 'block' : 'none';
     if (tab) {
       tab.classList.remove('active','done','locked-tab');
       if (i < n) tab.classList.add('done');
-      else if (i === n) tab.classList.add('active');
-      else if (i > n && i === 4) tab.classList.add('locked-tab');
+      else if (i === n) { tab.classList.add('active'); tab.onclick = () => showStep(i); }
+      else tab.classList.add('locked-tab');
     }
   });
-}
-
-function generatePreview() {
-  showStep(4);
-  // Simuler un état de génération
-  const tab4 = document.getElementById('tab4');
-  tab4.classList.remove('locked-tab');
-  tab4.classList.add('active');
-  tab4.textContent = '04 — Génération…';
-  setTimeout(() => {
-    document.getElementById('preview-anchor').scrollIntoView({ behavior: 'smooth' });
-    tab4.textContent = '04 — Rapport ✓';
-    tab4.classList.remove('active');
-    tab4.classList.add('done');
-  }, 2000);
 }
 
 function goToFlow() {
@@ -1067,47 +1022,12 @@ function selectFormule(el, formule) {
 
 function submitFormule() {
   if (!selectedFormule) { alert('Choisissez une formule pour continuer.'); return; }
-
-  // Récupérer toutes les données saisies dans le flow
-  const prenom = (document.getElementById('prenomInput')?.value || '').trim();
-  const nom = (document.getElementById('nomInput')?.value || '').trim();
-  const societe = (document.getElementById('companyInput')?.value || '').trim();
-  const ville = (document.getElementById('villeInput')?.value || '').trim();
-  const poste = (document.getElementById('posteInput')?.value || '').trim();
-  const typeEntretien = (document.getElementById('typeInput')?.value || '').trim();
-  const linkedin = (document.getElementById('linkedinInput')?.value || '').trim();
-  const offre = (document.getElementById('offerText')?.value || '').trim();
-
-  // Récupérer les sélections pills
-  const niveau = document.querySelector('.q-opt.sel[onclick*="niv"]')?.textContent?.trim() || '';
-  const secteur = document.querySelector('.q-opt.sel[onclick*="secteur"]')?.textContent?.trim() || '';
-  const typePoste = document.querySelector('.q-opt.sel[onclick*="typeposte"]')?.textContent?.trim() || '';
-  const worry = document.querySelector('.q-opt.sel[onclick*="worry"]')?.textContent?.trim() || '';
-
-  // Construire les paramètres URL pour pré-remplir Tally
-  const params = new URLSearchParams();
-  if (prenom) params.set('prenom', prenom);
-  if (nom) params.set('nom', nom);
-  if (societe) params.set('societe', societe);
-  if (ville) params.set('ville', ville);
-  if (poste) params.set('poste', poste);
-  if (typeEntretien) params.set('type_entretien', typeEntretien);
-  if (niveau) params.set('niveau', niveau);
-  if (secteur) params.set('secteur', secteur);
-  if (typePoste) params.set('type_poste', typePoste);
-  if (worry) params.set('inquietude', worry);
-  if (linkedin) params.set('linkedin', linkedin);
-  if (offre) params.set('offre', offre.substring(0, 500)); // Tally limite les params URL
-
-  const bases = {
+  const urls = {
     gratuit: 'https://tally.so/r/XxYyGV',
     rapport: 'https://tally.so/r/GxDk8p',
     coaching: 'https://tally.so/r/q4WePk'
   };
-
-  const queryString = params.toString();
-  const url = queryString ? `${bases[selectedFormule]}?${queryString}` : bases[selectedFormule];
-  window.open(url, '_blank');
+  window.open(urls[selectedFormule], '_blank');
 }
 
 // ——— Q-OPT SELECTION ———
@@ -1137,25 +1057,6 @@ function setAudience(el) {
 }
 // Init
 document.querySelector('.pill.featured') && setAudience(document.querySelector('.pill.featured'));
-
-// ——— FILE UPLOAD TRIGGERS ———
-function triggerUpload(id) { document.getElementById(id).click(); }
-document.getElementById('offerFile').addEventListener('change', e => {
-  if (e.target.files[0]) {
-    const zone = e.target.previousElementSibling;
-    zone.querySelector('.upload-label').textContent = e.target.files[0].name;
-    zone.querySelector('.upload-hint').textContent = 'Fichier chargé ✓';
-    zone.style.borderColor = 'var(--gold)';
-  }
-});
-document.getElementById('cvFile').addEventListener('change', e => {
-  if (e.target.files[0]) {
-    const zone = e.target.previousElementSibling;
-    zone.querySelector('.upload-label').textContent = e.target.files[0].name;
-    zone.querySelector('.upload-hint').textContent = 'Fichier chargé ✓';
-    zone.style.borderColor = 'var(--gold)';
-  }
-});
 
 // ——— CTA FORM ———
 function handleCTA(e) {
